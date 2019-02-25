@@ -24,16 +24,16 @@ namespace BlackJack.BusinessLogic.Services
             _playerGameStatusRepository = playerGameStatusRepository;
         }
 
-        public async Task<List<PlayersViewModel>> GetAllPlayers()
+        public async Task<List<PlayerViewModel>> GetAllPlayers()
         {
             var players = await _playerRepository.GetAll();
 
-            List<PlayersViewModel> ListPlayersViewModel = new List<PlayersViewModel>();
+            List<PlayerViewModel> ListPlayersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
             {
                 if (item.PlayerRole == PlayerRole.Player)
                 {
-                    PlayersViewModel playerVM = new PlayersViewModel
+                    PlayerViewModel playerVM = new PlayerViewModel
                     {
                         Id = item.Id,
                         Name = item.NickName

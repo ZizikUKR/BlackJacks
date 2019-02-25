@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\PlayersViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />
+    <Compile Include="ViewModels\StartGameViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

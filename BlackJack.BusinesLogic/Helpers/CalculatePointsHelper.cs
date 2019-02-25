@@ -7,11 +7,11 @@ namespace BlackJack.BusinessLogic.Helpers
 {
     public static class CalculatePointsHelper
     {
-        public static List<PlayersViewModel> CalculatePlayersPoints(List<Move> moves, List<Player> players)
+        public static List<PlayerViewModel> CalculatePlayersPoints(List<Move> moves, List<Player> players)
         {
-            List<PlayersViewModel> playersViewModels = new List<PlayersViewModel>();
+            List<PlayerViewModel> playersViewModels = new List<PlayerViewModel>();
 
-            playersViewModels = players.Select(p => new PlayersViewModel
+            playersViewModels = players.Select(p => new PlayerViewModel
             {
                 Id = p.Id,
                 Name = p.NickName,

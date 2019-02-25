@@ -1,12 +1,10 @@
-﻿using BlackJack.BusinessLogic.Interfaces;
-using System;
+﻿using BlackJack.ApiUI.ViewModels;
+using BlackJack.BusinessLogic.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace BlackJack.ApiUI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RegisterController : ApiController
     {
         private readonly IGameService _service;
@@ -20,13 +18,13 @@ namespace BlackJack.ApiUI.Controllers
         {
             var users = await _service.GetAllPlayers();
 
-            return Json(users);
+            return Ok(users);
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> StartGame([FromBody] object[] mas)
+        public async Task<IHttpActionResult> StartGame([FromBody] StartViewModel model)
         {
-            var id = await _service.StartGame(Convert.ToString(mas[0]), Convert.ToInt32(mas[1]));
+            var id = await _service.StartGame(model.UserName, model.CountOfBots);
             return Ok(id);
         }
     }

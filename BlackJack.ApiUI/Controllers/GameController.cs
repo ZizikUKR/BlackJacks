@@ -2,11 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace BlackJack.ApiUI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class GameController : ApiController
     {
         private readonly IGameService _service;
@@ -19,7 +17,7 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetFirsTwoMoves([FromUri] string id)
         {
             var moves = await _service.ShowPlayerMoves(Guid.Parse(id));
-            return Json(moves);
+            return Ok(moves);
         }
 
         [HttpGet]
@@ -29,12 +27,8 @@ namespace BlackJack.ApiUI.Controllers
             var isGameOver = await _service.GetOneMoreCardForPlayer(gameId);
 
             var moves = await _service.ShowPlayerMoves(gameId);
-
-            if (isGameOver == false)
-            {
-                return Json(moves);
-            }
-            return Json(moves);
+         
+            return Ok(moves);
         }
 
         [HttpGet]
@@ -54,7 +48,7 @@ namespace BlackJack.ApiUI.Controllers
 
             var mainPlayer = await _service.GetStatusForCurrentGame(gameId);
 
-            return Json(mainPlayer);
+            return Ok(mainPlayer);
         }
 
     }

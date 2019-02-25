@@ -8,12 +8,12 @@ namespace BlackJack.BusinessLogic.Autofac
 {
     public class AutofacConfigBisinesLogic
     {
-        public static void ConfigInBisnessLogic(ContainerBuilder builder, HttpConfiguration config)
+        public static void Configuration(ContainerBuilder builder, HttpConfiguration config)
         {
             builder.RegisterType<GameService>().As<IGameService>();
             builder.RegisterType<HistoryService>().As<IHistoryService>();
 
-            AutofacConfigDataAccess.ConfigInDataAccess(builder, config);
+            AutofacConfigDataAccess.Configuration(builder, config);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace BlackJack.BusinessLogic.Interfaces
 {
     public interface IGameService
     {
-        Task<List<PlayersViewModel>> GetAllPlayers();
+        Task<List<PlayerViewModel>> GetAllPlayers();
         Task<Guid> StartGame(string name, int bots);
         Task<GameViewModel> ShowPlayerMoves(Guid Id);
         Task<bool> GetOneMoreCardForPlayer(Guid gameId);
         Task<bool> GetCardsForBots(Guid gameId);
-        Task<PlayersViewModel> GetStatusForCurrentGame(Guid id);
+        Task<PlayerViewModel> GetStatusForCurrentGame(Guid id);
     }
 }

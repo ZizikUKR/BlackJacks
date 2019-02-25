@@ -1,4 +1,4 @@
-﻿@model BlackJack.BusinessLogic.ViewModels.PlayersViewModel
+﻿@model BlackJack.BusinessLogic.ViewModels.StartGameViewModel
 @{
     ViewBag.Title = "Home Page";
 }
@@ -11,14 +11,14 @@
     <div class="form-group">
         <label class="col-md-2 control-label">Select numbers of Bots</label>
         <div class="col-md-10">
-            @Html.DropDownList("bots", (IEnumerable<SelectListItem>)ViewBag.numberOfBots, new { @class = "form-control" })
+            @Html.DropDownList("bots", Model.NumberOfBots, new { @class = "form-control" })
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-2">Choose NickName</label>
         <div class="col-md-10">
-            @Html.DropDownList("name", (IEnumerable<SelectListItem>)ViewBag.selectListPlayers, new { @class = "form-control playersDropDown" })
+            @Html.DropDownList("name", Model.Players, new { @class = "form-control playersDropDown" })
         </div>
     </div>
 

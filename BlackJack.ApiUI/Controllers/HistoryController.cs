@@ -1,12 +1,11 @@
-﻿using BlackJack.BusinessLogic.Interfaces;
+﻿using BlackJack.ApiUI.ViewModels;
+using BlackJack.BusinessLogic.Interfaces;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace BlackJack.ApiUI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HistoryController : ApiController
     {
         private readonly IHistoryService _service;
@@ -19,16 +18,16 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetPlayers()
         {
             var players = await _service.GetAllPlayers();
-            return Json(players);
+            return Ok(players);
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] dynamic username)
+        public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] HistoryViewModel body)
         {
-            string srt = username.username.ToString();
+            string srt = body.UserName;
 
             var games = await _service.GetAllGamesForOnePlayer(srt);
-            return Json(games);
+            return Ok(games);
         }
 
         [HttpGet]
@@ -36,7 +35,7 @@ namespace BlackJack.ApiUI.Controllers
         {
             Guid gameId = Guid.Parse(id);
             var moves = await _service.GetAllMovesForCurrentGame(gameId);
-            return Json(moves);
+            return Ok(moves);
         }
     }
 }

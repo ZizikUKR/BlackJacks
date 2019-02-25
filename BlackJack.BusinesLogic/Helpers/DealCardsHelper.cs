@@ -32,7 +32,16 @@ namespace BlackJack.BusinessLogic.Helpers
                 }
             }
         }
-        
+
+        public Card GetCard(List<Card> deckOfCard)
+        {
+            Random random = new Random();
+
+            var cardToUser = random.Next(0, deckOfCard.Count);
+            Card cardToAdd = deckOfCard[cardToUser];
+            return cardToAdd;
+        }
+
         private byte GetCardPoints(CardValue cardValue)
         {
             if (cardValue == CardValue.Jack || cardValue == CardValue.Queen || cardValue == CardValue.King)

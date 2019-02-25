@@ -3,7 +3,7 @@ using System;
 
 namespace BlackJack.BusinessLogic.ViewModels
 {
-    public class PlayersViewModel
+    public class PlayerViewModel
     {
         public Guid Id { get; set; }
 

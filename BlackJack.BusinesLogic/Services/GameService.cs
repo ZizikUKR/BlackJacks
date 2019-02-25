@@ -20,6 +20,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private const int pointsToVictory = 21;
         private const int pointsToStop = 17;
+        private const int firstMoveNumber = 1;
 
         public GameService(IPlayerRepository playerRepository, IGameRepository gameRepository, IMoveRepository moveRepository, IPlayerGameStatusRepository playerGameStatusRepository)
         {
@@ -39,18 +40,17 @@ namespace BlackJack.BusinessLogic.Services
             int firstTwoMovesIterator = 2;
             for (int i = 1; i <= firstTwoMovesIterator; i++)
             {
-                Move(allParticipantsInGame, game, ref moves);
+                Move(allParticipantsInGame, game, moves);
                 await AddFirstTwoMoves(moves, i);
             }
-
             return game.Id;
         }
 
-        public async Task<List<PlayersViewModel>> GetAllPlayers()
+        public async Task<List<PlayerViewModel>> GetAllPlayers()
         {
             var players = await _playerRepository.GetAll(); 
 
-            List<PlayersViewModel> ListPlayersViewModel = new List<PlayersViewModel>();
+            List<PlayerViewModel> ListPlayersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
             {
                 if (item.PlayerRole != PlayerRole.Player)
@@ -58,7 +58,7 @@ namespace BlackJack.BusinessLogic.Services
                     continue;
                 }
 
-                ListPlayersViewModel.Add(new PlayersViewModel
+                ListPlayersViewModel.Add(new PlayerViewModel
                 {
                     Id = item.Id,
                     Name = item.NickName
@@ -69,22 +69,20 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<GameViewModel> ShowPlayerMoves(Guid id)
         {
-            var listOfMoves = await _moveRepository.GetAllMovesForOneGame(id);
+            var listOfMoves = (await _moveRepository.GetAllMovesForOneGame(id)).OrderBy(p=>p.PlayerId);
             var allPlayers = await _playerRepository.GetAll();
 
-            GameViewModel gameViewModel = new GameViewModel();
-
-            foreach (var item in listOfMoves)
+            GameViewModel gameViewModel = new GameViewModel
             {
-                gameViewModel.Rounds.Add(new RoundViewModel
+                Rounds = listOfMoves.Select(p => new RoundViewModel
                 {
-                    Id = item.Id,
-                    CardValue = item.CardName,
-                    RoundNumber = item.MoveNumber,
-                    GameId = item.GameId,
-                    PlayerNickName = allPlayers.SingleOrDefault(m => m.Id == item.PlayerId).NickName
-                });
-            }
+                    Id = p.Id,
+                    CardValue = p.CardName,
+                    GameId = p.GameId,
+                    RoundNumber = p.MoveNumber,
+                    PlayerNickName = allPlayers.SingleOrDefault(m => m.Id == p.PlayerId).NickName
+                }).ToList()
+            };
             return gameViewModel;
         }
 
@@ -97,13 +95,13 @@ namespace BlackJack.BusinessLogic.Services
             bool isGameOver = false;
             List<Player> playersInCurrentGame = new List<Player>();
 
-            int firstMoveNumber = 1;
+            
             foreach (var move in moves.Where(p => p.MoveNumber == firstMoveNumber))
             {
                 playersInCurrentGame.Add(allPlayersExist.SingleOrDefault(p => p.Id == move.PlayerId));
             }
 
-            List<PlayersViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+            List<PlayerViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
 
             foreach (var item in playersViews)
             {
@@ -116,7 +114,7 @@ namespace BlackJack.BusinessLogic.Services
                 }
             }
 
-            List<PlayersViewModel> newPlayersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+            List<PlayerViewModel> newPlayersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
             if (newPlayersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Player).Points >= pointsToVictory)
             {
                 var result = await GetCardsForBots(gameId);
@@ -131,12 +129,12 @@ namespace BlackJack.BusinessLogic.Services
             var moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
 
             List<Player> playersInCurrentGame = new List<Player>();
-            foreach (var move in moves.Where(p => p.MoveNumber == 1))
+            foreach (var move in moves.Where(p => p.MoveNumber == firstMoveNumber))
             {
                 playersInCurrentGame.Add(allPlayersExist.SingleOrDefault(p => p.Id == move.PlayerId));
             }
 
-            List<PlayersViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+            List<PlayerViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
 
             foreach (var item in playersViews)
             {
@@ -153,7 +151,7 @@ namespace BlackJack.BusinessLogic.Services
             return isGameOver;
         }
 
-        public async Task<PlayersViewModel> GetStatusForCurrentGame(Guid id)
+        public async Task<PlayerViewModel> GetStatusForCurrentGame(Guid id)
         {
             var playersStatusesInCurrentGame = (await _playerGameStatusRepository.GetPlayerStatusForGame(id)).ToList();
             var allPlayersExist = (await _playerRepository.GetAll()).ToList();
@@ -168,14 +166,14 @@ namespace BlackJack.BusinessLogic.Services
                 }
             }
 
-            PlayersViewModel model = new PlayersViewModel
+            PlayerViewModel model = new PlayerViewModel
             {
                 Status = mainPlayer.GameStatus.ToString()
             };
             return model;
         }
 
-        private async Task GetOneMoreCardForOneBotMove(Guid gameId, List<Player> playersInCurrentGame, List<Move> moves, List<PlayersViewModel> playersViews)
+        private async Task GetOneMoreCardForOneBotMove(Guid gameId, List<Player> playersInCurrentGame, List<Move> moves, List<PlayerViewModel> playersViews)
         {
             foreach (var item in playersViews)
             {
@@ -192,7 +190,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task GetCardForDealer(List<Player> playersInCurrentGame, Guid gameId, List<Move> moves)
         {
-            List<PlayersViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+            List<PlayerViewModel> playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
             int counterForDealerPoints = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer).Points;
 
             foreach (var item in playersViews)
@@ -208,7 +206,7 @@ namespace BlackJack.BusinessLogic.Services
             await FinishGame(playersViews, gameId);
         }
 
-        private async Task FinishGame(List<PlayersViewModel> playersViews, Guid gameId)
+        private async Task FinishGame(List<PlayerViewModel> playersViews, Guid gameId)
         {
             var dealer = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer);
             playersViews.Remove(dealer);
@@ -264,10 +262,7 @@ namespace BlackJack.BusinessLogic.Services
 
             DeleteUsedCardsFromDeck(ref deckOfCard, moves);
 
-            Random random = new Random();
-
-            var cardToUser = random.Next(0, deckOfCard.Count);
-            Card cardToAdd = deckOfCard[cardToUser];
+            Card cardToAdd = dealDeck.GetCard(deckOfCard);
 
             var moveIterator = moves.Where(p => p.PlayerId == player.Id).Count();
             Move move = new Move
@@ -297,37 +292,34 @@ namespace BlackJack.BusinessLogic.Services
             var allPlayersExists = await _playerRepository.GetAll();
             var currentPlayer = await PlayerRegistration(name);
 
-            List<Player> bots = new List<Player>
+            List<Player> players = new List<Player>
             {
-                currentPlayer
+                currentPlayer,
+                allPlayersExists.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer)
             };
 
             int counterForAddingBot = 0;
-            foreach (var item in allPlayersExists)
+            foreach (var item in allPlayersExists.Where(p=>p.PlayerRole==PlayerRole.Bot))
             {
                 if (item.PlayerRole == PlayerRole.Bot && counterForAddingBot < amoutOfBots)
                 {
                     counterForAddingBot++;
-                    bots.Add(item);
-                }
-                if (item.PlayerRole == PlayerRole.Dealer)
-                {
-                    bots.Add(item);
+                    players.Add(item);
                 }
             }
-            return bots;
+            return players;
         }
 
         private async Task<Player> PlayerRegistration(string name)
         {
-            var playersInDb = await _playerRepository.FindPlayerByName(name);
+            var player = await _playerRepository.FindPlayerByName(name);
 
-            if (playersInDb == null)
+            if (player != null)
             {
-                await _playerRepository.Add(new Player { NickName = name, PlayerRole = PlayerRole.Player });
-                return await _playerRepository.FindPlayerByName(name);
-            }
-            return playersInDb;
+                return player;
+            }            
+            await _playerRepository.Add(new Player { NickName = name, PlayerRole = PlayerRole.Player });
+            return await _playerRepository.FindPlayerByName(name);
         }
 
         private async Task<Game> CreateGame(List<Player> players)
@@ -341,7 +333,7 @@ namespace BlackJack.BusinessLogic.Services
             return game;
         }
 
-        private void Move(List<Player> players, Game game, ref List<Move> moves)
+        private void Move(List<Player> players, Game game, List<Move> moves)
         {
             List<Card> deckOfCard = new List<Card>();
 
