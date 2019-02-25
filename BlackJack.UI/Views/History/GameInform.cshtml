@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BlackJack.BusinessLogic.ViewModels.RoundViewModel>
+
+@{
+    ViewBag.Title = "GameInform";
+}
+
+<div class="container">
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <p>@item.PlayerNickName</p>
+                    <div class="card-title">
+                        <h4 class="card-title">
+                            Raund @item.RoundNumber
+                        </h4>
+                        <p class="card-text">
+                            @item.CardValue
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

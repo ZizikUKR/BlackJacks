@@ -1,0 +1,45 @@
+﻿@model BlackJack.BusinessLogic.ViewModels.PlayersViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="form-group">
+
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Select numbers of Bots</label>
+        <div class="col-md-10">
+            @Html.DropDownList("bots", (IEnumerable<SelectListItem>)ViewBag.numberOfBots, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Choose NickName</label>
+        <div class="col-md-10">
+            @Html.DropDownList("name", (IEnumerable<SelectListItem>)ViewBag.selectListPlayers, new { @class = "form-control playersDropDown" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 ">
+            <input type="submit" class="btn btn-success" value="Start" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-5 ">
+            @Html.ActionLink("History", "ChoosePlayer", "History",new { }, new { @class= "form-control btn btn-link" })
+        </div>
+    </div>
+}
+@section Scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script>
+        $(".playersDropDown").select2({
+            tags: true
+        });            
+    </script>
+}
+

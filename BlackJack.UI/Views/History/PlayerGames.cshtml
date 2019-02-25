@@ -1,0 +1,20 @@
+﻿@model IEnumerable<BlackJack.BusinessLogic.ViewModels.FinishGameViewModel>
+
+@{
+    ViewBag.Title = "PlayerGames";
+}
+
+<h2>PlayerGames</h2>
+
+@foreach (var item in Model)
+{
+    <div class="form-group">       
+        <p class="col-md-2">@item.Player</p>
+        <p class="col-md-2">@item.Result</p>         
+        <p class="col-md-2">Game is @item.IsFinished</p>
+
+        <div class="col-md-6">
+            @Html.ActionLink("Would you like to see Cards", "GameInform", new { item.Id})
+        </div>
+    </div>
+}

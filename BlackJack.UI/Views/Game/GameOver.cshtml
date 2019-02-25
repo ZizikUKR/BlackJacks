@@ -1,0 +1,15 @@
+﻿@model BlackJack.BusinessLogic.ViewModels.PlayersViewModel
+
+@{
+    ViewBag.Title = "GameOver";
+}
+
+@if(Model.Status== "Draw")
+{
+    <h1>It's a Draw</h1>
+}
+else
+{
+    <h1>You @Model.Status</h1>
+}
+

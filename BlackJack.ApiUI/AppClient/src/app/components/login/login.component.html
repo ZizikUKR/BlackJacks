@@ -1,0 +1,25 @@
+
+<div class="form-group">
+  <label class="col-md-2">Choose Player</label>
+  <input [(ngModel)]="userName" class="nameInput col-offset-2" list="usernames" #name="ngModel" required>
+<datalist id="usernames">
+  <option *ngFor="let user of users" [ngValue]="user.Name">{{user.Name}}</option>
+</datalist>
+</div>
+<div>
+
+</div>
+<div class="form-group">
+  <label class="col-md-2">Count of Bots</label>
+  <select class="col-offset-2" [(ngModel)]="countOfBots" required>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+  </select>
+</div>
+
+<button (click)="registration()" type="submit">Start</button>
+
+<button routerLink='/history' >History</button>
+

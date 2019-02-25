@@ -1,0 +1,18 @@
+﻿@model BlackJack.BusinessLogic.ViewModels.GameViewModel
+
+@{
+    ViewBag.Title = "Start";
+}
+
+@foreach (var item in Model.Rounds)
+{
+    <div>
+        <label>@item.PlayerNickName</label> <br />
+        <label>@item.CardValue</label> <br />
+        @Html.ActionLink("Hit", "NextMove", "Game", new { @id = item.GameId }, new { @class = "form-group" })
+        @Html.ActionLink("Stand", "Stand", "Game", new { @id = item.GameId }, new { @class = "form-group" })
+    </div>
+}
+
+
+
