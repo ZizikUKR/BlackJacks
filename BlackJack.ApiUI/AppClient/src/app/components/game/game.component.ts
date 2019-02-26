@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/shared/services/Game.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Move } from 'src/app/shared/models/move.model';
+import { GameInformation } from 'src/app/shared/models/game-info.model';
 
 @Component({
   selector: 'app-game',
@@ -10,13 +12,12 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 export class GameComponent implements OnInit {
   public users = [];
-  public moves: object[];
+  public moves: Move[];
   public gameId: string = '';
   public isOver = false;
   public status = '';
 
-  constructor(private testService: GameService, private activatedRoute: ActivatedRoute) {
-
+  constructor(private gameService: GameService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -27,35 +28,38 @@ export class GameComponent implements OnInit {
   }
 
 
-  public getMoves(id: any) {
-    this.testService.showMoves(id).subscribe((res: any) => {
-      this.moves = res.Rounds
-
+  public getMoves(id: string): void {
+    this.gameService.showMoves(id).subscribe((res: Move[]) => {
+      this.moves = res;
+      console.log(this.moves);
     })
   }
 
-  public getCard(id:any){
-   this.testService.nextMove(id).subscribe((res:any)=>{      
+  public getCard(id: string): void {
+    this.gameService.nextMove(id).subscribe(res => {
+      console.log(res);
       this.getMoves(id);
       this.isOver = res;
       this.showResult(this.isOver);
-   })
+    })
   }
 
-  public getRestOfCards(id:any){
-    this.testService.dealRestOfCards(id).subscribe((res:any)=>{
+  public getRestOfCards(id: string): void {
+    this.gameService.dealRestOfCards(id).subscribe(res => {
       this.isOver = res;
       this.getMoves(id);
-      this.showResult(this.isOver);
-    })  
+      this.status = this.showResult(this.isOver);
+    })
   }
 
-  public showResult(isFinish:boolean){
-    if(isFinish===true){
-      this.testService.getGameInfo(this.gameId).subscribe((res:any)=>{
-        this.status = res.Status;
+  public showResult(isFinish: boolean): string {
+    if (isFinish) {
+      this.gameService.getGameInfo(this.gameId).subscribe((res: GameInformation) => {
+        console.log(res);
+        return res.result
       })
-    }                                                                                
+    }
+    return '';
   }
 
 }

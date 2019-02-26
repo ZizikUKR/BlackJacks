@@ -1,5 +1,8 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.BusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -17,7 +20,16 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetFirsTwoMoves([FromUri] string id)
         {
             var moves = await _service.ShowPlayerMoves(Guid.Parse(id));
-            return Ok(moves);
+
+            List<RoundViewModel> list = moves.Rounds.Select(p => new RoundViewModel
+            {
+                Id = p.Id,
+                CardValue = p.CardValue,
+                GameId = p.GameId,
+                PlayerNickName = p.PlayerNickName,
+                RoundNumber = p.RoundNumber
+            }).ToList();
+            return Ok(list);
         }
 
         [HttpGet]
@@ -26,9 +38,8 @@ namespace BlackJack.ApiUI.Controllers
             Guid gameId = Guid.Parse(id);
             var isGameOver = await _service.GetOneMoreCardForPlayer(gameId);
 
-            var moves = await _service.ShowPlayerMoves(gameId);
-         
-            return Ok(moves);
+
+            return Ok(isGameOver);
         }
 
         [HttpGet]

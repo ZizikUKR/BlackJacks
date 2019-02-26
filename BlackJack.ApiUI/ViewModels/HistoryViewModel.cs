@@ -2,6 +2,7 @@
 {
     public class HistoryViewModel
     {
-        public string UserName { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

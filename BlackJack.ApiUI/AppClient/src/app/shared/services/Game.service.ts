@@ -1,35 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { IStartGame } from '../models/startgame.model';
+import { Observable } from 'rxjs';
+import { IPlayer } from '../models/player.model';
+import { Move } from '../models/move.model';
+import { GameInformation } from '../models/game-info.model';
 
 
 @Injectable()
 
 export class GameService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  public getUsers() {
-      return this.http.get('http://localhost:61994/api/Register/GetAllUser' );
+  public getUsers(): Observable<IPlayer[]> {
+    return this.http.get<IPlayer[]>('http://localhost:61994/api/Register/GetAllUser');
   }
-  public startGame(body: any) {
-    return this.http.post('http://localhost:61994/api/Register/StartGame', [body.username, body.countOfBots] );
+  public startGame(model: IStartGame): Observable<Object> {
+    return this.http.post('http://localhost:61994/api/Register/StartGame', model);
   }
-  public showMoves(id:any){
+  public showMoves(id: string): Observable<Move[]> {
 
-    return this.http.get('http://localhost:61994/api/Game/GetFirsTwoMoves/' + id)
-  }
-
-  public nextMove(id:any){
-    return this.http.get('http://localhost:61994/api/Game/NextRoundForPlayer/'+ id)
+    return this.http.get<Move[]>('http://localhost:61994/api/Game/GetFirsTwoMoves/' + id)
   }
 
-  public dealRestOfCards(id:any){
-    console.log(id)
-      return this.http.get('http://localhost:61994/api/Game/DealRestOfCards/'+ id)
+  public nextMove(id: string): Observable<boolean> {
+    return this.http.get<boolean>('http://localhost:61994/api/Game/NextRoundForPlayer/' + id)
   }
 
-  public getGameInfo(id:any){
-    return this.http.get('http://localhost:61994/api/Game/GameResult/'+id)
+  public dealRestOfCards(id: string): Observable<boolean> {
+    return this.http.get<boolean>('http://localhost:61994/api/Game/DealRestOfCards/' + id)
+  }
+
+  public getGameInfo(id: string): Observable<GameInformation> {
+    return this.http.get<GameInformation>('http://localhost:61994/api/Game/GameResult/' + id)
   }
 
 }

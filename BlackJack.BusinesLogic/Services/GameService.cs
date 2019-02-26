@@ -48,7 +48,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<PlayerViewModel>> GetAllPlayers()
         {
-            var players = await _playerRepository.GetAll(); 
+            var players = await _playerRepository.GetAll();
 
             List<PlayerViewModel> ListPlayersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
@@ -69,7 +69,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<GameViewModel> ShowPlayerMoves(Guid id)
         {
-            var listOfMoves = (await _moveRepository.GetAllMovesForOneGame(id)).OrderBy(p=>p.PlayerId);
+            var listOfMoves = (await _moveRepository.GetAllMovesForOneGame(id)).OrderBy(p => p.PlayerId);
             var allPlayers = await _playerRepository.GetAll();
 
             GameViewModel gameViewModel = new GameViewModel
@@ -95,7 +95,7 @@ namespace BlackJack.BusinessLogic.Services
             bool isGameOver = false;
             List<Player> playersInCurrentGame = new List<Player>();
 
-            
+
             foreach (var move in moves.Where(p => p.MoveNumber == firstMoveNumber))
             {
                 playersInCurrentGame.Add(allPlayersExist.SingleOrDefault(p => p.Id == move.PlayerId));
@@ -159,7 +159,7 @@ namespace BlackJack.BusinessLogic.Services
             GameResult mainPlayer = new GameResult();
             foreach (var item in playersStatusesInCurrentGame)
             {
-                var main = allPlayersExist.SingleOrDefault(p => p.Id == item.PlayerId);
+                var main = allPlayersExist.SingleOrDefault(p => p.Id == item.PlayerId && p.PlayerRole == PlayerRole.Player);
                 if (main != null)
                 {
                     mainPlayer.GameStatus = item.GameStatus;
@@ -213,7 +213,8 @@ namespace BlackJack.BusinessLogic.Services
 
             foreach (var item in playersViews)
             {
-                if (dealer.Points == item.Points || (dealer.Points > pointsToVictory && item.Points > pointsToVictory))
+                if ((dealer.Points == item.Points && dealer.Points < pointsToVictory && item.Points < pointsToVictory)
+                    || (dealer.Points > pointsToVictory && item.Points > pointsToVictory))
                 {
                     GameResult player = new GameResult
                     {
@@ -224,7 +225,8 @@ namespace BlackJack.BusinessLogic.Services
                     await AddPlayerInGameStatus(player);
                 }
 
-                if ((dealer.Points <= pointsToVictory && dealer.Points > item.Points && item.Points <= pointsToVictory) || (dealer.Points <= pointsToVictory && item.Points > pointsToVictory))
+                if ((dealer.Points <= pointsToVictory && dealer.Points > item.Points && item.Points <= pointsToVictory)
+                    || (dealer.Points <= pointsToVictory && item.Points > pointsToVictory))
                 {
                     GameResult player = new GameResult
                     {
@@ -235,7 +237,8 @@ namespace BlackJack.BusinessLogic.Services
                     await AddPlayerInGameStatus(player);
                 }
 
-                if ((dealer.Points <= pointsToVictory && dealer.Points < item.Points && item.Points <= pointsToVictory) || (dealer.Points > pointsToVictory && item.Points <= pointsToVictory))
+                if ((dealer.Points <= pointsToVictory && dealer.Points < item.Points && item.Points <= pointsToVictory)
+                    || (dealer.Points > pointsToVictory && item.Points <= pointsToVictory))
                 {
                     GameResult player = new GameResult
                     {
@@ -299,7 +302,7 @@ namespace BlackJack.BusinessLogic.Services
             };
 
             int counterForAddingBot = 0;
-            foreach (var item in allPlayersExists.Where(p=>p.PlayerRole==PlayerRole.Bot))
+            foreach (var item in allPlayersExists.Where(p => p.PlayerRole == PlayerRole.Bot))
             {
                 if (item.PlayerRole == PlayerRole.Bot && counterForAddingBot < amoutOfBots)
                 {
@@ -317,7 +320,7 @@ namespace BlackJack.BusinessLogic.Services
             if (player != null)
             {
                 return player;
-            }            
+            }
             await _playerRepository.Add(new Player { NickName = name, PlayerRole = PlayerRole.Player });
             return await _playerRepository.FindPlayerByName(name);
         }
