@@ -24,9 +24,9 @@ namespace BlackJack.ApiUI.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] PlayerViewModel body)
         {
-            string srt = body.Name;
+            
 
-            var games = await _service.GetAllGamesForOnePlayer(srt);
+            var games = await _service.GetAllGamesForOnePlayer(body.Name);
             return Ok(games);
         }
 

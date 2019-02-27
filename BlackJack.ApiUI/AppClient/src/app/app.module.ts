@@ -1,31 +1,34 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule,  } from '@angular/core';
+import { NgModule, } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { GameService } from './shared/services/Game.service';
+import { GameService } from './shared/services/game.service';
 import { HttpClientModule } from '@angular/common/http';
-import { GameComponent } from './components/game/game.component';
-import {Routes, RouterModule} from '@angular/router';
-import { HistoryComponent } from './components/history/history.component';
+import { Routes, RouterModule } from '@angular/router';
 import { HistoryService } from './shared/services/history.service';
 import { LoginComponent } from './components/login/login.component';
-import { HistoryRoundsComponent } from './components/history-rounds/history-rounds.component';
+import { RegisterService } from './shared/services/register.service';
 
 
 const appRoutes: Routes = [
-  {path:'',component: LoginComponent},
-  {path:'game/:id',component: GameComponent},
-  {path:'history',component: HistoryComponent},
-  {path: 'history/gameRounds/:id',component: HistoryRoundsComponent}
+  {
+    path: '',
+    component: LoginComponent
+  },
+  {
+    path: 'game/:id',
+    loadChildren: './components/game/game.module#GameModule'
+  },
+  {
+    path: 'history',
+    loadChildren: './components/history/history.module#HistoryModule'
+  },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameComponent,
-    LoginComponent,
-    HistoryComponent,
-    HistoryRoundsComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [GameService, HistoryService],
+  providers: [GameService, HistoryService, RegisterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

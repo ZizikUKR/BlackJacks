@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GameService } from 'src/app/shared/services/Game.service';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { GameService } from 'src/app/shared/services/game.service';
+import { ActivatedRoute } from '@angular/router';
 import { Move } from 'src/app/shared/models/move.model';
 import { GameInformation } from 'src/app/shared/models/game-info.model';
 
@@ -48,18 +48,20 @@ export class GameComponent implements OnInit {
     this.gameService.dealRestOfCards(id).subscribe(res => {
       this.isOver = res;
       this.getMoves(id);
-      this.status = this.showResult(this.isOver);
+      this.showResult(this.isOver);
+      console.log(this.status)
     })
   }
 
-  public showResult(isFinish: boolean): string {
-    if (isFinish) {
-      this.gameService.getGameInfo(this.gameId).subscribe((res: GameInformation) => {
+  public showResult(isFinish:boolean) {
+     if (isFinish) {
+      this.gameService.getGameInfo(this.gameId).subscribe((res: any) => {
         console.log(res);
-        return res.result
+        this.status = res.Status     
+         return
       })
-    }
-    return '';
+     }
+     this.status = '';
   }
 
 }

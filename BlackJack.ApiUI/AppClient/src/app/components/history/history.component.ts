@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HistoryService } from 'src/app/shared/services/history.service';
 import { IPlayer } from 'src/app/shared/models/player.model';
+import { GameInformation } from 'src/app/shared/models/game-info.model';
 
 
 @Component({
@@ -11,8 +12,8 @@ import { IPlayer } from 'src/app/shared/models/player.model';
 })
 export class HistoryComponent implements OnInit {
   public players: IPlayer[] = [];
-  public userName = '';
-  public games = [];
+  public userName ='';
+  public games:GameInformation[] = [];
 
   constructor(private historyService: HistoryService, private router: Router) { }
 
@@ -20,23 +21,22 @@ export class HistoryComponent implements OnInit {
     this.getAllPlayers();
   }
 
-  public getAllPlayers() {
+  public getAllPlayers():void {
     this.historyService.getUsers().subscribe((res: IPlayer[]) => {
       this.players = res;
     })
   }
-
-  public getAllGames(playerName: string) {
+  
+  public getAllGames(playerName:string):void {
     let model: IPlayer = {
       name: playerName
     }
-    this.historyService.getAllPlayerGames(model).subscribe((res: any) => {
+    this.historyService.getAllPlayerGames(model).subscribe((res: GameInformation[]) => {
       this.games = res;
-      console.log(res);
     })
   }
 
-  public showGameMoves(id: any) {
+  public showGameMoves(id: string):void {
     this.router.navigate(
       ["history/gameRounds", id]
     );

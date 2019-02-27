@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GameService } from './shared/services/Game.service';
+import { GameService } from './shared/services/game.service';
 
 
 @Component({
@@ -11,7 +11,4 @@ import { GameService } from './shared/services/Game.service';
 export class AppComponent  {
   constructor (private testService: GameService) {
   }
-
-
-
 }

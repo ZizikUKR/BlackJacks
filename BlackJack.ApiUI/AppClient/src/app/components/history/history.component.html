@@ -1,17 +1,17 @@
 <h2>Please choose player</h2>
 
 
-<select [(ngModel)]="userName">
-  <option *ngFor="let player of players" [ngValue]="player.Name">{{player.Name}}</option>
-</select>
+  <select [(ngModel)]="userName">
+    <option *ngFor="let player of players" [ngValue]="player.Name">{{player.Name}}</option>
+  </select>
 
 
-<button (click)="getAllGames(userName)" type="submit">See</button>
+  <button (click)="getAllGames(userName)" type="submit">See</button>
 
 
-<div *ngFor="let game of games; let i = index">
-  <p>Game number-{{i+1}}</p>
-  <p>{{game.Result}}</p>
-  <button [routerLink]="['/history/gameRounds/', game.Id]">See rounds</button>
-</div>
+  <div *ngFor="let game of games; let i = index">
+    <p>Game number-{{i+1}}</p>
+    <p>{{game.Result}}</p>
+    <button [routerLink]="['/history/gameRounds/', game.Id]" >See rounds</button>
+  </div>
 >

@@ -1,7 +1,7 @@
 <div *ngIf="isOver">
   <h1>The game is finished!</h1>
 </div>
-<div *ngIf='isOver'>
+<div *ngIf="isOver">
   <h2>{{status}}</h2>
 </div>
 
@@ -11,6 +11,6 @@
 
 <div class="form-group" *ngIf="!isOver">
   <button (click)="getCard(gameId)">Hit</button>
-  <button (click)="getRestOfCards(gameId)">Stand</button>
+  <button (click)="getRestOfCards(gameId)" >Stand</button>
 </div>
 

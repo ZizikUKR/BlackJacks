@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HistoryService } from 'src/app/shared/services/history.service';
+import { Move } from 'src/app/shared/models/move.model';
 
 @Component({
   selector: 'app-history-rounds',
@@ -9,10 +10,12 @@ import { HistoryService } from 'src/app/shared/services/history.service';
 })
 export class HistoryRoundsComponent implements OnInit {
 
-  public rounds=[];
+  public rounds:Move[];
   public gameId = '';
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private historyService:HistoryService) 
-  { }
+  {
+    this.rounds =[];
+   }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params=>{
@@ -22,10 +25,7 @@ export class HistoryRoundsComponent implements OnInit {
   }
 
   public loadRounds(id:string){
-    this.historyService.getAllRounds(id).subscribe((res:any)=>{
-      console.log(res);
-      console.log(res);
-      console.log(res);
+    this.historyService.getAllRounds(id).subscribe((res:Move[])=>{
       this.rounds = res;
     })
   }
