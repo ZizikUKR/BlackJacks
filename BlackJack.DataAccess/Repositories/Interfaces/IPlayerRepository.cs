@@ -8,5 +8,6 @@ namespace BlackJack.DataAccess.Repositories.Interfaces
     {
         Task<IEnumerable<Player>> GetAll();
         Task<Player> FindPlayerByName(string name);
+        Task<IEnumerable<Player>> GetAllBotsAndDealer();
     }
 }

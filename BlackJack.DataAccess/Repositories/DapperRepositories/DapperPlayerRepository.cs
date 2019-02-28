@@ -15,13 +15,19 @@ namespace BlackJack.DataAccess.Repositories.DapperRepositories
 
         public async Task<Player> FindPlayerByName(string name)
         {
-            var res = await Connection.QueryFirstOrDefaultAsync<Player>($"SELECT Id,NickName,PlayerRole FROM Players WHERE NickName=@name",new { name});
+            var res = await Connection.QueryFirstOrDefaultAsync<Player>($"SELECT * FROM Players WHERE NickName=@name",new { name});
             return res;
         }
 
         public async Task<IEnumerable<Player>> GetAll()
         {
             var res = await Connection.QueryAsync<Player>($"SELECT * FROM { _table}");
+            return res;
+        }
+
+        public async Task<IEnumerable<Player>> GetAllBotsAndDealer()
+        {
+            var res = await Connection.QueryAsync<Player>($"SELECT * FROM {_table} WHERE PlayerRole !=1");
             return res;
         }
     }

@@ -14,8 +14,9 @@ namespace BlackJack.DataAccess.Autofac
     {
         public static void ConfigureContainer(ContainerBuilder builder, HttpConfiguration config)
         {
-            RegisterDapperRepositories(ref builder);
-            var container = builder.Build();
+             RegisterDapperRepositories(ref builder);
+            //RegisterEFRepositories(ref builder);
+             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }

@@ -20,10 +20,8 @@ namespace BlackJack.BusinessLogic.Helpers
 
             foreach (var move in moves)
             {
-                var player = playersViewModels.SingleOrDefault(p => p.Id == move.PlayerId);
-                player.Points += move.CardPoints;
+                playersViewModels.FirstOrDefault(p => p.Id == move.PlayerId).Points += move.CardPoints;
             }
-
             return playersViewModels;
         }
     }
