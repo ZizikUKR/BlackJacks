@@ -29,8 +29,8 @@ export class GameService {
     return this.http.get<boolean>(environment.apiUrl+this.gameApiUrl+'DealRestOfCards/' + id)
   }
 
-  public getGameInfo(id: string) : Observable<GameInformation> {
-    return this.http.get<GameInformation>(environment.apiUrl+this.gameApiUrl+'GameResult/' + id)
+  public getGameInfo(id: string) {
+    return this.http.get(environment.apiUrl+this.gameApiUrl+'GameResult/' + id)
   }
 
 }

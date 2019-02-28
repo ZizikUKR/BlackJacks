@@ -49,14 +49,12 @@ export class GameComponent implements OnInit {
       this.isOver = res;
       this.getMoves(id);
       this.showResult(this.isOver);
-      console.log(this.status)
     })
   }
 
-  public showResult(isFinish:boolean) {
+  public showResult(isFinish:boolean):void {
      if (isFinish) {
       this.gameService.getGameInfo(this.gameId).subscribe((res: any) => {
-        console.log(res);
         this.status = res.Status     
          return
       })

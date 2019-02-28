@@ -12,7 +12,7 @@ namespace BlackJack.DataAccess.Autofac
 {
     public class AutofacConfigDataAccess
     {
-        public static void Configuration(ContainerBuilder builder, HttpConfiguration config)
+        public static void ConfigureContainer(ContainerBuilder builder, HttpConfiguration config)
         {
             RegisterDapperRepositories(ref builder);
             var container = builder.Build();

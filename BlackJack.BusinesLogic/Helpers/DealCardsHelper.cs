@@ -8,6 +8,7 @@ namespace BlackJack.BusinessLogic.Helpers
     public class DealCardsHelper
     {
         private const byte _maxCardsPoints = 10;
+        public  Random random = new Random();
 
         public void GetAllCards(ref List<Card> deck)
         {
@@ -34,9 +35,7 @@ namespace BlackJack.BusinessLogic.Helpers
         }
 
         public Card GetCard(List<Card> deckOfCard)
-        {
-            Random random = new Random();
-
+        {          
             var cardToUser = random.Next(0, deckOfCard.Count);
             Card cardToAdd = deckOfCard[cardToUser];
             return cardToAdd;

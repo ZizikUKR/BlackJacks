@@ -12,14 +12,12 @@ namespace BlackJack.BusinessLogic.Services
     public class HistoryService : IHistoryService
     {
         private IPlayerRepository _playerRepository;
-        private IGameRepository _gameRepository;
         private IMoveRepository _moveRepository;
         private IPlayerGameStatusRepository _playerGameStatusRepository;
 
-        public HistoryService(IPlayerRepository playerRepository, IGameRepository gameRepository, IMoveRepository moveRepository, IPlayerGameStatusRepository playerGameStatusRepository)
+        public HistoryService(IPlayerRepository playerRepository, IMoveRepository moveRepository, IPlayerGameStatusRepository playerGameStatusRepository)
         {
             _playerRepository = playerRepository;
-            _gameRepository = gameRepository;
             _moveRepository = moveRepository;
             _playerGameStatusRepository = playerGameStatusRepository;
         }

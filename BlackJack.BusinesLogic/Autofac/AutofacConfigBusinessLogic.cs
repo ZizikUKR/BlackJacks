@@ -6,14 +6,14 @@ using System.Web.Http;
 
 namespace BlackJack.BusinessLogic.Autofac
 {
-    public class AutofacConfigBisinesLogic
+    public class AutofacConfigBusinessLogic
     {
-        public static void Configuration(ContainerBuilder builder, HttpConfiguration config)
+        public static void ConfigureContainer(ContainerBuilder builder, HttpConfiguration config)
         {
             builder.RegisterType<GameService>().As<IGameService>();
             builder.RegisterType<HistoryService>().As<IHistoryService>();
 
-            AutofacConfigDataAccess.Configuration(builder, config);
+            AutofacConfigDataAccess.ConfigureContainer(builder, config);
         }
     }
 }

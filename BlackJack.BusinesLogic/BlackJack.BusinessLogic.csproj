@@ -77,7 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autofac\AutofacConfigBisinesLogic.cs" />
+    <Compile Include="Autofac\AutofacConfigBusinessLogic.cs" />
     <Compile Include="Services\GameService.cs" />
     <Compile Include="Helpers\CalculatePointsHelper.cs" />
     <Compile Include="Helpers\DealCardsHelper.cs" />

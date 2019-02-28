@@ -16,7 +16,7 @@ namespace BlackJack.UI.Autofac
             var config = GlobalConfiguration.Configuration;
             builder.RegisterWebApiFilterProvider(config);
 
-            AutofacConfigBisinesLogic.Configuration(builder, config);
+            AutofacConfigBusinessLogic.ConfigureContainer(builder, config);
         }
     }
 }

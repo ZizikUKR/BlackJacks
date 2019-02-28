@@ -67,6 +67,8 @@ Thumbs.db
 *.[Cc]ache
 *[Rr]esharper*
 packages
+/AppClient/node_modules
+
 NuGet.exe
 _[Ss]cripts
 *.exe
@@ -75,3 +77,4 @@ _[Ss]cripts
 *.ncrunchsolution
 *.dot[Cc]over
 vs
+node_modules/

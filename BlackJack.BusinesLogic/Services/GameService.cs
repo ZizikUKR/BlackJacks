@@ -105,13 +105,14 @@ namespace BlackJack.BusinessLogic.Services
 
             foreach (var item in playersViews)
             {
-                if (item.Points < pointsToVictory && item.PlayerRole == PlayerRole.Player)
+                if (item.Points < pointsToVictory && item.PlayerRole != PlayerRole.Player)
                 {
-                    Player player = playersInCurrentGame.SingleOrDefault(m => m.Id == item.Id);
-                    await MoveForOnePlayer(player, moves, gameId);
-
-                    moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
+                    continue;
                 }
+                Player player = playersInCurrentGame.SingleOrDefault(m => m.Id == item.Id);
+                await MoveForOnePlayer(player, moves, gameId);
+
+                moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
             }
 
             List<PlayerViewModel> newPlayersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
@@ -138,12 +139,13 @@ namespace BlackJack.BusinessLogic.Services
 
             foreach (var item in playersViews)
             {
-                if (item.Points < pointsToStop)
+                if (item.Points >= pointsToStop)
                 {
-                    await GetOneMoreCardForOneBotMove(gameId, playersInCurrentGame, moves, playersViews);
-                    moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
-                    playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+                    continue;
                 }
+                await GetOneMoreCardForOneBotMove(gameId, playersInCurrentGame, moves, playersViews);
+                moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
+                playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
             }
             await GetCardForDealer(playersInCurrentGame, gameId, moves);
 
@@ -160,10 +162,11 @@ namespace BlackJack.BusinessLogic.Services
             foreach (var item in playersStatusesInCurrentGame)
             {
                 var main = allPlayersExist.SingleOrDefault(p => p.Id == item.PlayerId && p.PlayerRole == PlayerRole.Player);
-                if (main != null)
+                if (main == null)
                 {
-                    mainPlayer.GameStatus = item.GameStatus;
+                    continue;
                 }
+                mainPlayer.GameStatus = item.GameStatus;
             }
 
             PlayerViewModel model = new PlayerViewModel
@@ -195,13 +198,14 @@ namespace BlackJack.BusinessLogic.Services
 
             foreach (var item in playersViews)
             {
-                if (counterForDealerPoints < pointsToStop)
+                if (counterForDealerPoints >= pointsToStop)
                 {
-                    await MoveForOnePlayer(playersInCurrentGame.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer), moves, gameId);
-                    moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
-                    playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
-                    counterForDealerPoints = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer).Points;
+                    continue;
                 }
+                await MoveForOnePlayer(playersInCurrentGame.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer), moves, gameId);
+                moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
+                playersViews = CalculatePointsHelper.CalculatePlayersPoints(moves, playersInCurrentGame);
+                counterForDealerPoints = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer).Points;
             }
             await FinishGame(playersViews, gameId);
         }
@@ -304,7 +308,7 @@ namespace BlackJack.BusinessLogic.Services
             int counterForAddingBot = 0;
             foreach (var item in allPlayersExists.Where(p => p.PlayerRole == PlayerRole.Bot))
             {
-                if (item.PlayerRole == PlayerRole.Bot && counterForAddingBot < amoutOfBots)
+                if (counterForAddingBot < amoutOfBots)
                 {
                     counterForAddingBot++;
                     players.Add(item);

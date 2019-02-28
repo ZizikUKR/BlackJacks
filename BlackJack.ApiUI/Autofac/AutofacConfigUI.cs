@@ -20,7 +20,7 @@ namespace BlackJack.ApiUI.Autofac
 
             builder.RegisterWebApiModelBinderProvider();
 
-            AutofacConfigBisinesLogic.Configuration(builder, config);
+            AutofacConfigBusinessLogic.ConfigureContainer(builder, config);
         }
     }
 }
