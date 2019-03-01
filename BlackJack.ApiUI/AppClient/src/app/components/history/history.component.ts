@@ -33,7 +33,7 @@ export class HistoryComponent implements OnInit {
     }
     console.log(model.name)
     this.historyService.getAllPlayerGames(model).subscribe(res => {
-      this.games = res;
+      this.games = res.finishGameViewModels;
     })
   }
 

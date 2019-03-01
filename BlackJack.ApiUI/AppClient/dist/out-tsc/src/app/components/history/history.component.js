@@ -25,7 +25,7 @@ var HistoryComponent = /** @class */ (function () {
         };
         console.log(model.name);
         this.historyService.getAllPlayerGames(model).subscribe(function (res) {
-            _this.games = res;
+            _this.games = res.finishGameViewModels;
         });
     };
     HistoryComponent.prototype.showGameMoves = function (id) {

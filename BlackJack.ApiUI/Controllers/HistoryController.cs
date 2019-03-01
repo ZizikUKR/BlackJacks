@@ -2,6 +2,7 @@
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,17 +20,30 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetPlayers()
         {
             var players = await _service.GetAllPlayers();
+            if(players == null)
+            {
+               throw new HttpResponseException(HttpStatusCode.NoContent);
+            }
             PlayerViewModelList model = new PlayerViewModelList
             {
                 PlayerViewModels = players
             };
+
             return Ok(model);
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] PlayerViewModel body)
         {
+            if (string.IsNullOrWhiteSpace(body.Name))
+            {
+                return BadRequest();
+            }
             var games = await _service.GetAllGamesForOnePlayer(body.Name);
+            if (games == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
             FinishGameViewModelList model = new FinishGameViewModelList
             {
                 FinishGameViewModels = games
@@ -42,7 +56,15 @@ namespace BlackJack.ApiUI.Controllers
         {
             Guid gameId = Guid.Parse(id);
             var moves = await _service.GetAllMovesForCurrentGame(gameId);
-            return Ok(moves);
+            if (moves == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            RoundsViewModelList model = new RoundsViewModelList
+            {
+                RoundViewModels = moves
+            };
+            return Ok(model);
         }
     }
 }

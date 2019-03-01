@@ -1,5 +1,6 @@
 ﻿using BlackJack.ApiUI.ViewModels;
 using BlackJack.BusinessLogic.Interfaces;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -27,7 +28,15 @@ namespace BlackJack.ApiUI.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> StartGame([FromBody] StartViewModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.UserName))
+            {
+                return BadRequest();
+            }
             var id = await _service.StartGame(model.UserName, model.CountOfBots);
+            if (id == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NoContent);
+            }
             return Ok(id);
         }
     }

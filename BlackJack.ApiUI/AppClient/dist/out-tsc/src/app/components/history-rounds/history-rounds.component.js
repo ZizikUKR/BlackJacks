@@ -7,7 +7,6 @@ var HistoryRoundsComponent = /** @class */ (function () {
         this.activatedRoute = activatedRoute;
         this.historyService = historyService;
         this.gameId = '';
-        this.rounds = [];
     }
     HistoryRoundsComponent.prototype.ngOnInit = function () {
         var _this = this;

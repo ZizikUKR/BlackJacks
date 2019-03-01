@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GameInformation } from '../models/game-info.model';
 import { environment } from 'src/app/environments/environment';
 import { IPlayer } from 'src/app/shared/models/player.model';
 import { PlayersList } from '../models/players-list.model';
 import { MoveList } from '../models/moves-list.model';
+import { FinishGameList } from '../models/finish-game-list';
 
 
 @Injectable()
@@ -18,9 +18,9 @@ export class HistoryService {
          return this.http.get<PlayersList>(environment.apiUrl+this.historyApiUrl+'GetPlayers');
     }
 
-    public getAllPlayerGames(body:IPlayer): Observable<GameInformation[]>{
+    public getAllPlayerGames(body:IPlayer): Observable<FinishGameList>{
         console.log(body);
-        return this.http.post<GameInformation[]>(environment.apiUrl+this.historyApiUrl+ 'GetAllPlayerGames', body);
+        return this.http.post<FinishGameList>(environment.apiUrl+this.historyApiUrl+ 'GetAllPlayerGames', body);
     }
 
     public getAllRounds(id:string):Observable<MoveList>{

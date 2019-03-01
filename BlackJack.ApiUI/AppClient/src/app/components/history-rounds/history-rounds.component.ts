@@ -13,9 +13,7 @@ export class HistoryRoundsComponent implements OnInit {
   public rounds:Move[];
   public gameId = '';
   constructor(private activatedRoute: ActivatedRoute, private historyService:HistoryService) 
-  {
-    this.rounds =[];
-   }
+  { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params=>{
