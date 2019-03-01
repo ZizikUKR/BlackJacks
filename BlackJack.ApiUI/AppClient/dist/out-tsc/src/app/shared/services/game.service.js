@@ -8,7 +8,7 @@ var GameService = /** @class */ (function () {
         this.gameApiUrl = '/api/Game/';
     }
     GameService.prototype.showMoves = function (id) {
-        return this.http.get(environment.apiUrl + this.gameApiUrl + 'GetFirsTwoMoves/' + id);
+        return this.http.get(environment.apiUrl + this.gameApiUrl + 'GetFirstTwoMoves/' + id);
     };
     GameService.prototype.nextMove = function (id) {
         return this.http.get(environment.apiUrl + this.gameApiUrl + 'NextRoundForPlayer/' + id);

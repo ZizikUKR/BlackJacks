@@ -11,6 +11,7 @@ var HistoryService = /** @class */ (function () {
         return this.http.get(environment.apiUrl + this.historyApiUrl + 'GetPlayers');
     };
     HistoryService.prototype.getAllPlayerGames = function (body) {
+        console.log(body);
         return this.http.post(environment.apiUrl + this.historyApiUrl + 'GetAllPlayerGames', body);
     };
     HistoryService.prototype.getAllRounds = function (id) {

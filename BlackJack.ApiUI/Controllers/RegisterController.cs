@@ -17,8 +17,11 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetAllUser()
         {
             var users = await _service.GetAllPlayers();
-
-            return Ok(users);
+            PlayerViewModelList model = new PlayerViewModelList
+            {
+                PlayerViewModels = users
+            };
+            return Ok(model);
         }
 
         [HttpPost]

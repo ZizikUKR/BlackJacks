@@ -1,10 +1,9 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HistoryService } from 'src/app/shared/services/history.service';
 var HistoryRoundsComponent = /** @class */ (function () {
-    function HistoryRoundsComponent(router, activatedRoute, historyService) {
-        this.router = router;
+    function HistoryRoundsComponent(activatedRoute, historyService) {
         this.activatedRoute = activatedRoute;
         this.historyService = historyService;
         this.gameId = '';
@@ -20,7 +19,7 @@ var HistoryRoundsComponent = /** @class */ (function () {
     HistoryRoundsComponent.prototype.loadRounds = function (id) {
         var _this = this;
         this.historyService.getAllRounds(id).subscribe(function (res) {
-            _this.rounds = res;
+            _this.rounds = res.roundViewModels;
         });
     };
     HistoryRoundsComponent = tslib_1.__decorate([
@@ -29,7 +28,7 @@ var HistoryRoundsComponent = /** @class */ (function () {
             templateUrl: './history-rounds.component.html',
             styleUrls: ['./history-rounds.component.css']
         }),
-        tslib_1.__metadata("design:paramtypes", [Router, ActivatedRoute, HistoryService])
+        tslib_1.__metadata("design:paramtypes", [ActivatedRoute, HistoryService])
     ], HistoryRoundsComponent);
     return HistoryRoundsComponent;
 }());

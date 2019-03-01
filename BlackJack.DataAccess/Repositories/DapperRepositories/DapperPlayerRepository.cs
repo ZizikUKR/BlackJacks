@@ -1,4 +1,5 @@
 ﻿using BlackJack.DataAccess.Entities;
+using BlackJack.DataAccess.Entities.Enums;
 using BlackJack.DataAccess.Repositories.Interfaces;
 using Dapper;
 using System.Collections.Generic;
@@ -10,12 +11,11 @@ namespace BlackJack.DataAccess.Repositories.DapperRepositories
     {
         public DapperPlayerRepository(string connectionString) : base(connectionString, "Players")
         {
-
         }
 
         public async Task<Player> FindPlayerByName(string name)
         {
-            var res = await Connection.QueryFirstOrDefaultAsync<Player>($"SELECT * FROM Players WHERE NickName=@name",new { name});
+            var res = await Connection.QueryFirstOrDefaultAsync<Player>($"SELECT * FROM Players WHERE NickName=@name", new { name });
             return res;
         }
 
@@ -27,7 +27,7 @@ namespace BlackJack.DataAccess.Repositories.DapperRepositories
 
         public async Task<IEnumerable<Player>> GetAllBotsAndDealer()
         {
-            var res = await Connection.QueryAsync<Player>($"SELECT * FROM {_table} WHERE PlayerRole !=1");
+            var res = await Connection.QueryAsync<Player>($"SELECT * FROM {_table} WHERE PlayerRole !=@role", new { role = PlayerRole.Player });
             return res;
         }
     }

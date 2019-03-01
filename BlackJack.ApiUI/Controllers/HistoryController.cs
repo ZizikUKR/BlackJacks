@@ -1,4 +1,5 @@
-﻿using BlackJack.BusinessLogic.Interfaces;
+﻿using BlackJack.ApiUI.ViewModels;
+using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -18,16 +19,22 @@ namespace BlackJack.ApiUI.Controllers
         public async Task<IHttpActionResult> GetPlayers()
         {
             var players = await _service.GetAllPlayers();
-            return Ok(players);
+            PlayerViewModelList model = new PlayerViewModelList
+            {
+                PlayerViewModels = players
+            };
+            return Ok(model);
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] PlayerViewModel body)
         {
-            
-
             var games = await _service.GetAllGamesForOnePlayer(body.Name);
-            return Ok(games);
+            FinishGameViewModelList model = new FinishGameViewModelList
+            {
+                FinishGameViewModels = games
+            };
+            return Ok(model);
         }
 
         [HttpGet]

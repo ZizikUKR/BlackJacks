@@ -15,13 +15,10 @@ namespace BlackJack.BusinessLogic.Helpers
             {
                 Id = p.Id,
                 Name = p.NickName,
-                PlayerRole = p.PlayerRole
+                PlayerRole = p.PlayerRole,
+                Points = moves.Where(z=>z.PlayerId==p.Id).Sum(z=>z.CardPoints)
             }).ToList();
 
-            foreach (var move in moves)
-            {
-                playersViewModels.FirstOrDefault(p => p.Id == move.PlayerId).Points += move.CardPoints;
-            }
             return playersViewModels;
         }
     }

@@ -50,20 +50,20 @@ namespace BlackJack.BusinessLogic.Services
         {
             var players = await _playerRepository.GetAll();
 
-            List<PlayerViewModel> ListPlayersViewModel = new List<PlayerViewModel>();
+            var playersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
             {
                 if (item.PlayerRole != PlayerRole.Player)
                 {
                     continue;
                 }
-                ListPlayersViewModel.Add(new PlayerViewModel
+                playersViewModel.Add(new PlayerViewModel
                 {
                     Id = item.Id,
                     Name = item.NickName
                 });
             }
-            return ListPlayersViewModel;
+            return playersViewModel;
         }
 
         public async Task<GameViewModel> ShowPlayerMoves(Guid id)
@@ -92,7 +92,7 @@ namespace BlackJack.BusinessLogic.Services
             var allPlayersExist = await _playerRepository.GetAll();
 
             bool isGameOver = false;
-            List<Player> playersInCurrentGame = new List<Player>();
+            var playersInCurrentGame = new List<Player>();
 
 
             foreach (var move in moves.Where(p => p.MoveNumber == firstMoveNumber))

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GameService } from 'src/app/shared/services/game.service';
 import { Router } from '@angular/router';
-import { IStartGame } from 'src/app/shared/models/startgame.model';
+import { IStartGame } from 'src/app/shared/models/start-game.model';
 import { IPlayer } from 'src/app/shared/models/player.model';
 import { RegisterService } from 'src/app/shared/services/register.service';
 
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
   private userName: string;
   private idGame: string;
 
-  constructor(private gameService: GameService, private router: Router, private registerService: RegisterService) {
+  constructor(private router: Router, private registerService: RegisterService) {
     this.users = [];
   }
 
@@ -28,8 +27,8 @@ export class LoginComponent implements OnInit {
   }
 
   public getUsers(): void {
-    this.registerService.getUsers().subscribe((res: IPlayer[]) => {
-      this.users = res
+    this.registerService.getUsers().subscribe(res => {
+      this.users = res.playerViewModels
     })
   }
 
@@ -39,7 +38,7 @@ export class LoginComponent implements OnInit {
       countOfBots : parseInt(this.countOfBots)
     }
 
-    this.registerService.startGame(model).subscribe((res: any) => {   
+    this.registerService.startGame(model).subscribe(res => {   
       this.router.navigate(
         ['/game', res]
       );

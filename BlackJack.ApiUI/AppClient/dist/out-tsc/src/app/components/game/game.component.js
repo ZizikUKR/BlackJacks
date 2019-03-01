@@ -21,14 +21,12 @@ var GameComponent = /** @class */ (function () {
     GameComponent.prototype.getMoves = function (id) {
         var _this = this;
         this.gameService.showMoves(id).subscribe(function (res) {
-            _this.moves = res;
-            console.log(_this.moves);
+            _this.moves = res.roundViewModels;
         });
     };
     GameComponent.prototype.getCard = function (id) {
         var _this = this;
         this.gameService.nextMove(id).subscribe(function (res) {
-            console.log(res);
             _this.getMoves(id);
             _this.isOver = res;
             _this.showResult(_this.isOver);
@@ -46,7 +44,7 @@ var GameComponent = /** @class */ (function () {
         var _this = this;
         if (isFinish) {
             this.gameService.getGameInfo(this.gameId).subscribe(function (res) {
-                _this.status = res.Status;
+                _this.status = res.status;
                 return;
             });
         }

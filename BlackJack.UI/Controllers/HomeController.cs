@@ -18,11 +18,11 @@ namespace BlackJack.UI.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            var playersInDB = (await _service.GetAllPlayers()).ToList();
+            var playerExist = (await _service.GetAllPlayers()).ToList();
 
             StartGameViewModel model = new StartGameViewModel
             {
-                Players = playersInDB.Select(player => new SelectListItem
+                Players = playerExist.Select(player => new SelectListItem
                 {
                     Value = player.Name.ToLower(),
                     Text = player.Name.ToLower()
@@ -35,7 +35,6 @@ namespace BlackJack.UI.Controllers
                  new SelectListItem{ Value="4",Text="4"}
              }
             };
-
             return View(model);
         }
 
@@ -46,7 +45,6 @@ namespace BlackJack.UI.Controllers
             {
                 return RedirectToAction("Index");
             }
-
             var id = await _service.StartGame(name, bots);
 
             return RedirectToAction("Start", "Game", new { id });

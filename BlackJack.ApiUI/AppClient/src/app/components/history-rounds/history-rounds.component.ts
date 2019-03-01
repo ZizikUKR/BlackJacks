@@ -12,7 +12,7 @@ export class HistoryRoundsComponent implements OnInit {
 
   public rounds:Move[];
   public gameId = '';
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private historyService:HistoryService) 
+  constructor(private activatedRoute: ActivatedRoute, private historyService:HistoryService) 
   {
     this.rounds =[];
    }
@@ -25,8 +25,8 @@ export class HistoryRoundsComponent implements OnInit {
   }
 
   public loadRounds(id:string){
-    this.historyService.getAllRounds(id).subscribe((res:Move[])=>{
-      this.rounds = res;
+    this.historyService.getAllRounds(id).subscribe(res=>{
+      this.rounds = res.roundViewModels;
     })
   }
   

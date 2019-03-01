@@ -2,16 +2,16 @@
 
 
   <select [(ngModel)]="userName">
-    <option *ngFor="let player of players" [ngValue]="player.Name">{{player.Name}}</option>
+    <option *ngFor="let player of players" [ngValue]="player.name">{{player.name}}</option>
   </select>
 
 
-  <button (click)="getAllGames(userName)" type="submit">See</button>
+  <button (click)="getAllGames()" type="submit">See</button>
 
 
   <div *ngFor="let game of games; let i = index">
     <p>Game number-{{i+1}}</p>
-    <p>{{game.Result}}</p>
-    <button [routerLink]="['/history/gameRounds/', game.Id]" >See rounds</button>
+    <p>{{game.result}}</p>
+    <button [routerLink]="['/history/gameRounds/', game.id]" >See rounds</button>
   </div>
 >

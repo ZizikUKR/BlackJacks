@@ -11,7 +11,7 @@ import { GameInformation } from 'src/app/shared/models/game-info.model';
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-  public players: IPlayer[] = [];
+  public players: IPlayer[];
   public userName ='';
   public games:GameInformation[] = [];
 
@@ -22,16 +22,17 @@ export class HistoryComponent implements OnInit {
   }
 
   public getAllPlayers():void {
-    this.historyService.getUsers().subscribe((res: IPlayer[]) => {
-      this.players = res;
+    this.historyService.getUsers().subscribe(res => {
+      this.players = res.playerViewModels;
     })
   }
   
-  public getAllGames(playerName:string):void {
+  public getAllGames():void {
     let model: IPlayer = {
-      name: playerName
+      name: this.userName
     }
-    this.historyService.getAllPlayerGames(model).subscribe((res: GameInformation[]) => {
+    console.log(model.name)
+    this.historyService.getAllPlayerGames(model).subscribe(res => {
       this.games = res;
     })
   }

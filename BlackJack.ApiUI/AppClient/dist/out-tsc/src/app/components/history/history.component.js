@@ -6,7 +6,6 @@ var HistoryComponent = /** @class */ (function () {
     function HistoryComponent(historyService, router) {
         this.historyService = historyService;
         this.router = router;
-        this.players = [];
         this.userName = '';
         this.games = [];
     }
@@ -16,14 +15,15 @@ var HistoryComponent = /** @class */ (function () {
     HistoryComponent.prototype.getAllPlayers = function () {
         var _this = this;
         this.historyService.getUsers().subscribe(function (res) {
-            _this.players = res;
+            _this.players = res.playerViewModels;
         });
     };
-    HistoryComponent.prototype.getAllGames = function (playerName) {
+    HistoryComponent.prototype.getAllGames = function () {
         var _this = this;
         var model = {
-            name: playerName
+            name: this.userName
         };
+        console.log(model.name);
         this.historyService.getAllPlayerGames(model).subscribe(function (res) {
             _this.games = res;
         });

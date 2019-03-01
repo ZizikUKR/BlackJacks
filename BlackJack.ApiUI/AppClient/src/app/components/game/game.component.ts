@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/shared/services/game.service';
 import { ActivatedRoute } from '@angular/router';
 import { Move } from 'src/app/shared/models/move.model';
-import { GameInformation } from 'src/app/shared/models/game-info.model';
 
 @Component({
   selector: 'app-game',
@@ -29,15 +28,13 @@ export class GameComponent implements OnInit {
 
 
   public getMoves(id: string): void {
-    this.gameService.showMoves(id).subscribe((res: Move[]) => {
-      this.moves = res;
-      console.log(this.moves);
+    this.gameService.showMoves(id).subscribe(res => {
+      this.moves = res.roundViewModels;
     })
   }
 
   public getCard(id: string): void {
     this.gameService.nextMove(id).subscribe(res => {
-      console.log(res);
       this.getMoves(id);
       this.isOver = res;
       this.showResult(this.isOver);
@@ -55,7 +52,7 @@ export class GameComponent implements OnInit {
   public showResult(isFinish:boolean):void {
      if (isFinish) {
       this.gameService.getGameInfo(this.gameId).subscribe((res: any) => {
-        this.status = res.Status     
+        this.status = res.status     
          return
       })
      }
