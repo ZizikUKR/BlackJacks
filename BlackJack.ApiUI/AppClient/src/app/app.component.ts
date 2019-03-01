@@ -9,6 +9,6 @@ import { GameService } from './shared/services/game.service';
 })
 
 export class AppComponent  {
-  constructor (private testService: GameService) {
+  constructor () {
   }
 }

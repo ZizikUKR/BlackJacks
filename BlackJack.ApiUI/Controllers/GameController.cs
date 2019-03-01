@@ -2,9 +2,7 @@
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -25,10 +23,15 @@ namespace BlackJack.ApiUI.Controllers
             {
                 return BadRequest();
             }
-            var moves = await _service.ShowPlayerMoves(Guid.Parse(id));
-            if (moves == null)
+
+            GameViewModel moves = new GameViewModel();
+            try
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                moves = await _service.ShowPlayerMoves(Guid.Parse(id));
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
 
             var list = moves.Rounds.Select(p => new RoundViewModel
@@ -40,7 +43,7 @@ namespace BlackJack.ApiUI.Controllers
                 RoundNumber = p.RoundNumber
             }).ToList();
 
-            RoundsViewModelList model = new RoundsViewModelList
+            Rounds model = new Rounds
             {
                 RoundViewModels = list
             };
@@ -55,8 +58,16 @@ namespace BlackJack.ApiUI.Controllers
                 return BadRequest();
             }
             Guid gameId = Guid.Parse(id);
-            var isGameOver = await _service.GetOneMoreCardForPlayer(gameId);
 
+            bool isGameOver = false;
+            try
+            {
+                isGameOver = await _service.GetOneMoreCardForPlayer(gameId);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(isGameOver);
         }
 
@@ -68,9 +79,15 @@ namespace BlackJack.ApiUI.Controllers
                 return BadRequest();
             }
             Guid gameId = Guid.Parse(id);
-
-            var res = await _service.GetCardsForBots(gameId);
-
+            bool res = false;
+            try
+            {
+                res = await _service.GetCardsForBots(gameId);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(res);
         }
 
@@ -82,13 +99,15 @@ namespace BlackJack.ApiUI.Controllers
                 return BadRequest();
             }
             Guid gameId = Guid.Parse(id);
-
-            var mainPlayer = await _service.GetStatusForCurrentGame(gameId);
-            if (mainPlayer == null)
+            PlayerViewModel mainPlayer = new PlayerViewModel();
+            try
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                mainPlayer = await _service.GetStatusForCurrentGame(gameId);
             }
-
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(mainPlayer);
         }
 

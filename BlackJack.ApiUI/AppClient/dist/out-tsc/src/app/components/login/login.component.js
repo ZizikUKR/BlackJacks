@@ -15,6 +15,8 @@ var LoginComponent = /** @class */ (function () {
         var _this = this;
         this.registerService.getUsers().subscribe(function (res) {
             _this.users = res.playerViewModels;
+        }, function (err) {
+            _this.router.navigate(["error"]);
         });
     };
     LoginComponent.prototype.registration = function () {
@@ -25,6 +27,8 @@ var LoginComponent = /** @class */ (function () {
         };
         this.registerService.startGame(model).subscribe(function (res) {
             _this.router.navigate(['/game', res]);
+        }, function (err) {
+            _this.router.navigate(["error"]);
         });
     };
     LoginComponent = tslib_1.__decorate([

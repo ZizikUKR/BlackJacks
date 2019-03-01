@@ -1,9 +1,7 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
-import { GameService } from './shared/services/game.service';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(testService) {
-        this.testService = testService;
+    function AppComponent() {
     }
     AppComponent = tslib_1.__decorate([
         Component({
@@ -11,7 +9,7 @@ var AppComponent = /** @class */ (function () {
             templateUrl: './app.component.html',
             styleUrls: ['./app.component.css']
         }),
-        tslib_1.__metadata("design:paramtypes", [GameService])
+        tslib_1.__metadata("design:paramtypes", [])
     ], AppComponent);
     return AppComponent;
 }());

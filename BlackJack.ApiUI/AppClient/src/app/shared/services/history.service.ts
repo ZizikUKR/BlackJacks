@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/app/environments/environment';
 import { IPlayer } from 'src/app/shared/models/player.model';
-import { PlayersList } from '../models/players-list.model';
-import { MoveList } from '../models/moves-list.model';
-import { FinishGameList } from '../models/finish-game-list';
+import { environment } from 'src/environments/environment';
+import { FinishGame } from 'src/app/shared/models/finish-game';
+import { Players } from '../models/players.model';
+import { Moves } from '../models/moves.model';
 
 
 @Injectable()
@@ -14,16 +14,16 @@ export class HistoryService {
     constructor(private http: HttpClient) {}
     private historyApiUrl = '/api/History/';
 
-    public getUsers() : Observable<PlayersList>{
-         return this.http.get<PlayersList>(environment.apiUrl+this.historyApiUrl+'GetPlayers');
+    public getUsers() : Observable<Players>{
+         return this.http.get<Players>(environment.apiUrl+this.historyApiUrl+'GetPlayers');
     }
 
-    public getAllPlayerGames(body:IPlayer): Observable<FinishGameList>{
+    public getAllPlayerGames(body:IPlayer): Observable<FinishGame>{
         console.log(body);
-        return this.http.post<FinishGameList>(environment.apiUrl+this.historyApiUrl+ 'GetAllPlayerGames', body);
+        return this.http.post<FinishGame>(environment.apiUrl+this.historyApiUrl+ 'GetAllPlayerGames', body);
     }
 
-    public getAllRounds(id:string):Observable<MoveList>{
-        return this.http.get<MoveList>(environment.apiUrl+this.historyApiUrl+'GetAllMovesForCurrentGame/'+id);
+    public getAllRounds(id:string):Observable<Moves>{
+        return this.http.get<Moves>(environment.apiUrl+this.historyApiUrl+'GetAllMovesForCurrentGame/'+id);
     }
 }

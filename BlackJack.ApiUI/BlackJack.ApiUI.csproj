@@ -190,10 +190,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\FinishGameViewModelList.cs" />
+    <Compile Include="ViewModels\FinishGame.cs" />
     <Compile Include="ViewModels\HistoryViewModel.cs" />
-    <Compile Include="ViewModels\PlayerViewModelList.cs" />
-    <Compile Include="ViewModels\RoundsViewModelList.cs" />
+    <Compile Include="ViewModels\Players.cs" />
+    <Compile Include="ViewModels\Rounds.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

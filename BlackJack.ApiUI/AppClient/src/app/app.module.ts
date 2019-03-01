@@ -8,6 +8,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HistoryService } from './shared/services/history.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterService } from './shared/services/register.service';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
 
 const appRoutes: Routes = [
@@ -23,12 +24,17 @@ const appRoutes: Routes = [
     path: 'history',
     loadChildren: './components/history/history.module#HistoryModule'
   },
+  {
+    path:'error',
+    component: ErrorPageComponent
+  }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

@@ -24,6 +24,11 @@ export class HistoryComponent implements OnInit {
   public getAllPlayers():void {
     this.historyService.getUsers().subscribe(res => {
       this.players = res.playerViewModels;
+    },
+    err =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
   
@@ -34,6 +39,11 @@ export class HistoryComponent implements OnInit {
     console.log(model.name)
     this.historyService.getAllPlayerGames(model).subscribe(res => {
       this.games = res.finishGameViewModels;
+    },
+    rr =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
 

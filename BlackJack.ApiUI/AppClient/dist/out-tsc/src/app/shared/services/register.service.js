@@ -1,7 +1,7 @@
 import * as tslib_1 from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/app/environments/environment';
+import { environment } from 'src/environments/environment';
 var RegisterService = /** @class */ (function () {
     function RegisterService(http) {
         this.http = http;

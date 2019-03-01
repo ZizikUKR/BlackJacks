@@ -1,11 +1,12 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
 import { GameService } from 'src/app/shared/services/game.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 var GameComponent = /** @class */ (function () {
-    function GameComponent(gameService, activatedRoute) {
+    function GameComponent(gameService, activatedRoute, router) {
         this.gameService = gameService;
         this.activatedRoute = activatedRoute;
+        this.router = router;
         this.users = [];
         this.gameId = '';
         this.isOver = false;
@@ -22,6 +23,8 @@ var GameComponent = /** @class */ (function () {
         var _this = this;
         this.gameService.showMoves(id).subscribe(function (res) {
             _this.moves = res.roundViewModels;
+        }, function (err) {
+            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.getCard = function (id) {
@@ -30,6 +33,8 @@ var GameComponent = /** @class */ (function () {
             _this.getMoves(id);
             _this.isOver = res;
             _this.showResult(_this.isOver);
+        }, function (err) {
+            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.getRestOfCards = function (id) {
@@ -38,14 +43,19 @@ var GameComponent = /** @class */ (function () {
             _this.isOver = res;
             _this.getMoves(id);
             _this.showResult(_this.isOver);
+        }, function (err) {
+            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.showResult = function (isFinish) {
         var _this = this;
         if (isFinish) {
             this.gameService.getGameInfo(this.gameId).subscribe(function (res) {
+                console.log(res);
                 _this.status = res.status;
                 return;
+            }, function (err) {
+                _this.router.navigate(["error"]);
             });
         }
         this.status = '';
@@ -56,7 +66,7 @@ var GameComponent = /** @class */ (function () {
             templateUrl: './game.component.html',
             styleUrls: ['./game.component.css']
         }),
-        tslib_1.__metadata("design:paramtypes", [GameService, ActivatedRoute])
+        tslib_1.__metadata("design:paramtypes", [GameService, ActivatedRoute, Router])
     ], GameComponent);
     return GameComponent;
 }());

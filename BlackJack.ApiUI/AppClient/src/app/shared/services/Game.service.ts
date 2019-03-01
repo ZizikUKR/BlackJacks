@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/app/environments/environment';
-import { MoveList } from '../models/moves-list.model';
+import { IPlayer } from '../models/player.model';
+import { environment } from 'src/environments/environment';
+import { Moves } from '../models/moves.model';
 
 
 @Injectable()
@@ -13,9 +14,9 @@ export class GameService {
 
   private gameApiUrl = '/api/Game/';
   
-  public showMoves(id: string): Observable<MoveList> {
+  public showMoves(id: string): Observable<Moves> {
   
-    return this.http.get<MoveList>(environment.apiUrl+this.gameApiUrl+'GetFirstTwoMoves/' + id)
+    return this.http.get<Moves>(environment.apiUrl+this.gameApiUrl+'GetFirstTwoMoves/' + id)
   }
 
   public nextMove(id: string) : Observable<boolean> {
@@ -26,8 +27,8 @@ export class GameService {
     return this.http.get<boolean>(environment.apiUrl+this.gameApiUrl+'DealRestOfCards/' + id)
   }
 
-  public getGameInfo(id: string) {
-    return this.http.get(environment.apiUrl+this.gameApiUrl+'GameResult/' + id)
+  public getGameInfo(id: string): Observable<IPlayer> {
+    return this.http.get<IPlayer>(environment.apiUrl+this.gameApiUrl+'GameResult/' + id)
   }
 
 }

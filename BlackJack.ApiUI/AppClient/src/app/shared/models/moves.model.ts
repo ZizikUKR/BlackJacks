@@ -1,6 +1,6 @@
 import { Move } from './move.model';
 
-export class MoveList{
+export class Moves{
     public roundViewModels : Move[];
 }
 

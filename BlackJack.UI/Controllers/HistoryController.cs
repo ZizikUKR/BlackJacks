@@ -1,4 +1,5 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.BusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,17 @@ namespace BlackJack.UI.Controllers
         [HttpGet]
         public async Task<ActionResult> ChoosePlayer()
         {
-            var playersInDB = (await _historyService.GetAllPlayers()).ToList();
+            List<PlayerViewModel> playersExist = new List<PlayerViewModel>();
+            try
+            {
+                playersExist = (await _historyService.GetAllPlayers()).ToList();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
 
-            List<SelectListItem> selectListPlayers = playersInDB.Select(x => new SelectListItem
+            List<SelectListItem> selectListPlayers = playersExist.Select(x => new SelectListItem
             {
                 Value = x.Name.ToLower(),
                 Text = x.Name.ToLower()
@@ -33,14 +42,37 @@ namespace BlackJack.UI.Controllers
 
         public async Task<ActionResult> PlayerGames(string name)
         {
-            var allGames = await _historyService.GetAllGamesForOnePlayer(name);
-
+            if (string.IsNullOrWhiteSpace(name))
+            {
+               return RedirectToAction("ChoosePlayer");
+            }
+            List<FinishGameViewModel> allGames = new List<FinishGameViewModel>();
+            try
+            {
+                allGames = await _historyService.GetAllGamesForOnePlayer(name);
+            }
+            catch (Exception)
+            {
+               return RedirectToAction("Error", "Home");
+            }
             return View(allGames);
         }
 
         public async Task<ActionResult> GameInform(Guid id)
         {
-            var moves = await _historyService.GetAllMovesForCurrentGame(id);
+            if (string.IsNullOrWhiteSpace(id.ToString()))
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            List<RoundViewModel> moves = new List<RoundViewModel>();
+            try
+            {
+                moves = await _historyService.GetAllMovesForCurrentGame(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
             List<SelectListItem> selectListPlayers = new List<SelectListItem>();
             return View(moves);
         }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/shared/services/game.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Move } from 'src/app/shared/models/move.model';
 
 @Component({
@@ -16,7 +16,7 @@ export class GameComponent implements OnInit {
   public isOver = false;
   public status = '';
 
-  constructor(private gameService: GameService, private activatedRoute: ActivatedRoute) {
+  constructor(private gameService: GameService, private activatedRoute: ActivatedRoute,private router: Router) {
   }
 
   ngOnInit() {
@@ -30,6 +30,11 @@ export class GameComponent implements OnInit {
   public getMoves(id: string): void {
     this.gameService.showMoves(id).subscribe(res => {
       this.moves = res.roundViewModels;
+    },
+    err =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
 
@@ -38,6 +43,11 @@ export class GameComponent implements OnInit {
       this.getMoves(id);
       this.isOver = res;
       this.showResult(this.isOver);
+    },
+    err =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
 
@@ -46,14 +56,25 @@ export class GameComponent implements OnInit {
       this.isOver = res;
       this.getMoves(id);
       this.showResult(this.isOver);
+    },
+    err =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
 
   public showResult(isFinish:boolean):void {
      if (isFinish) {
-      this.gameService.getGameInfo(this.gameId).subscribe((res: any) => {
+      this.gameService.getGameInfo(this.gameId).subscribe(res => {
+        console.log(res)
         this.status = res.status     
          return
+      },
+      err =>{
+        this.router.navigate(
+          ["error"]
+        );
       })
      }
      this.status = '';

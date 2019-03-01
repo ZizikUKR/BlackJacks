@@ -1,5 +1,5 @@
 import { GameInformation } from './game-info.model';
 
-export class FinishGameList{
+export class FinishGame{
     public finishGameViewModels : GameInformation[];
 }

@@ -26,30 +26,30 @@ namespace BlackJack.BusinessLogic.Services
         {
             var players = await _playerRepository.GetAll();
 
-            List<PlayerViewModel> ListPlayersViewModel = new List<PlayerViewModel>();
+            var playersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
             {
                 if (item.PlayerRole == PlayerRole.Player)
                 {
-                    PlayerViewModel playerVM = new PlayerViewModel
+                    PlayerViewModel player = new PlayerViewModel
                     {
                         Id = item.Id,
                         Name = item.NickName
                     };
-                    ListPlayersViewModel.Add(playerVM);
+                    playersViewModel.Add(player);
                 }
             }
-            return ListPlayersViewModel;
+            return playersViewModel;
         }
 
         public async Task<List<FinishGameViewModel>> GetAllGamesForOnePlayer(string name)
         {
             var playersExist = (await _playerRepository.GetAll()).ToList();
-            var mainPlayer = playersExist.SingleOrDefault(p => p.NickName == name);
+            var mainPlayer = playersExist.FirstOrDefault(p => p.NickName == name);
 
             var allGamesForCurrenPlayer = (await _playerGameStatusRepository.GetGameResultForOnePlayer(mainPlayer.Id)).ToList();
 
-            List<FinishGameViewModel> gamesResults = new List<FinishGameViewModel>();
+            var gamesResults = new List<FinishGameViewModel>();
             foreach (var item in allGamesForCurrenPlayer)
             {
                 gamesResults.Add(new FinishGameViewModel
@@ -67,7 +67,7 @@ namespace BlackJack.BusinessLogic.Services
         {
             var moves= (await _moveRepository.GetAllMovesForOneGame(id)).ToList();
             var allPlayersExist = (await _playerRepository.GetAll()).ToList();
-            List<RoundViewModel> rounds = new List<RoundViewModel>();
+            var rounds = new List<RoundViewModel>();
 
             foreach (var item in moves)
             {
@@ -76,7 +76,7 @@ namespace BlackJack.BusinessLogic.Services
                     CardValue=item.CardName,
                     Id= item.Id,
                     GameId=item.GameId,
-                    PlayerNickName = allPlayersExist.SingleOrDefault(p=>p.Id==item.PlayerId).NickName.ToString(),
+                    PlayerNickName = allPlayersExist.FirstOrDefault(p=>p.Id==item.PlayerId).NickName.ToString(),
                     RoundNumber = item.MoveNumber
                 });
             }

@@ -1,5 +1,6 @@
 
 export interface IPlayer{
     id?: string,
-    name:string
+    name:string,
+    status?:string
 }

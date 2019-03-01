@@ -26,7 +26,7 @@ namespace BlackJack.DataAccess.Repositories.EntityFrameworkRepositories
         }
         public async Task<IEnumerable<Player>> GetAllBotsAndDealer()
         {
-            return await _dbContext.Set<Player>().Where(p => p.PlayerRole != PlayerRole.Player).ToListAsync();            
+            return await _dbContext.Set<Player>().Where(p => p.PlayerRole==PlayerRole.Dealer || p.PlayerRole==PlayerRole.Bot).ToListAsync();            
         }
     }
 }

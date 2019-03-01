@@ -2,7 +2,7 @@
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,12 +19,17 @@ namespace BlackJack.ApiUI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPlayers()
         {
-            var players = await _service.GetAllPlayers();
-            if(players == null)
+            List<PlayerViewModel> players = new List<PlayerViewModel>();
+            try
             {
-               throw new HttpResponseException(HttpStatusCode.NoContent);
+                 players = await _service.GetAllPlayers();
             }
-            PlayerViewModelList model = new PlayerViewModelList
+            catch(Exception)
+            {
+                return InternalServerError();
+            }
+
+            Players model = new Players
             {
                 PlayerViewModels = players
             };
@@ -39,12 +44,17 @@ namespace BlackJack.ApiUI.Controllers
             {
                 return BadRequest();
             }
-            var games = await _service.GetAllGamesForOnePlayer(body.Name);
-            if (games == null)
+            List<FinishGameViewModel> games = new List<FinishGameViewModel>();
+            try
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                 games = await _service.GetAllGamesForOnePlayer(body.Name);
             }
-            FinishGameViewModelList model = new FinishGameViewModelList
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+           
+            FinishGame model = new FinishGame
             {
                 FinishGameViewModels = games
             };
@@ -54,13 +64,22 @@ namespace BlackJack.ApiUI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllMovesForCurrentGame([FromUri] string id)
         {
-            Guid gameId = Guid.Parse(id);
-            var moves = await _service.GetAllMovesForCurrentGame(gameId);
-            if (moves == null)
+            if (string.IsNullOrWhiteSpace(id))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return BadRequest();
             }
-            RoundsViewModelList model = new RoundsViewModelList
+            Guid gameId = Guid.Parse(id);
+            List<RoundViewModel> moves = new List<RoundViewModel>();
+            try
+            {
+                moves = await _service.GetAllMovesForCurrentGame(gameId);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+                        
+            Rounds model = new Rounds
             {
                 RoundViewModels = moves
             };

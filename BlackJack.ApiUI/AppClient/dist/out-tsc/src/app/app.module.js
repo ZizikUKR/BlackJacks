@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { HistoryService } from './shared/services/history.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterService } from './shared/services/register.service';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 var appRoutes = [
     {
         path: '',
@@ -22,6 +23,10 @@ var appRoutes = [
         path: 'history',
         loadChildren: './components/history/history.module#HistoryModule'
     },
+    {
+        path: 'error',
+        component: ErrorPageComponent
+    }
 ];
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -30,7 +35,8 @@ var AppModule = /** @class */ (function () {
         NgModule({
             declarations: [
                 AppComponent,
-                LoginComponent
+                LoginComponent,
+                ErrorPageComponent
             ],
             imports: [
                 BrowserModule,

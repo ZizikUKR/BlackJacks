@@ -11,12 +11,10 @@ import { RegisterService } from 'src/app/shared/services/register.service';
 })
 
 export class LoginComponent implements OnInit {
-
-
+  
   private users: IPlayer[];
   private countOfBots: string;
   private userName: string;
-  private idGame: string;
 
   constructor(private router: Router, private registerService: RegisterService) {
     this.users = [];
@@ -29,6 +27,11 @@ export class LoginComponent implements OnInit {
   public getUsers(): void {
     this.registerService.getUsers().subscribe(res => {
       this.users = res.playerViewModels
+    }, 
+    err =>{
+      this.router.navigate(
+        ["error"]
+      );
     })
   }
 
@@ -41,6 +44,11 @@ export class LoginComponent implements OnInit {
     this.registerService.startGame(model).subscribe(res => {   
       this.router.navigate(
         ['/game', res]
+      );
+    },
+    err =>{
+      this.router.navigate(
+        ["error"]
       );
     })
   }

@@ -87,7 +87,7 @@
     <Compile Include="Services\HistoryService.cs" />
     <Compile Include="ViewModels\FinishGameViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
-    <Compile Include="ViewModels\PlayersViewModel.cs" />
+    <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />
     <Compile Include="ViewModels\StartGameViewModel.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,8 +19,16 @@ namespace BlackJack.UI.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            var playerExist = (await _service.GetAllPlayers()).ToList();
-
+            List<PlayerViewModel> playerExist = new List<PlayerViewModel>();
+            try
+            {
+                playerExist = (await _service.GetAllPlayers()).ToList();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error");
+            }
+            
             StartGameViewModel model = new StartGameViewModel
             {
                 Players = playerExist.Select(player => new SelectListItem
@@ -45,9 +54,22 @@ namespace BlackJack.UI.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var id = await _service.StartGame(name, bots);
+            Guid id = new Guid();
+            try
+            {
+                id = await _service.StartGame(name, bots);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error");
+            }
 
             return RedirectToAction("Start", "Game", new { id });
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }

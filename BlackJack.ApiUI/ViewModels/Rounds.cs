@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace BlackJack.ApiUI.ViewModels
 {
-    public class RoundsViewModelList
+    public class Rounds
     {
         public List<RoundViewModel> RoundViewModels { get; set; }
 
-        public RoundsViewModelList()
+        public Rounds()
         {
             RoundViewModels = new List<RoundViewModel>();
         }
