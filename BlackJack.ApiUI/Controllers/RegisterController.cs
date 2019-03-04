@@ -1,6 +1,8 @@
 ﻿using BlackJack.ApiUI.ViewModels;
 using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.BusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,7 +21,7 @@ namespace BlackJack.ApiUI.Controllers
         {
             try
             {
-                var users = await _service.GetAllPlayers();
+                List<PlayerViewModel> users = await _service.GetAllPlayers();
                 Players model = new Players
                 {
                     PlayerViewModels = users
@@ -41,7 +43,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var id = await _service.StartGame(model.UserName, model.CountOfBots);
+                Guid id = await _service.StartGame(model.UserName, model.CountOfBots);
                 return Ok(id);
             }
             catch (Exception)

@@ -25,7 +25,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var moves = await _service.ShowPlayerMoves(Guid.Parse(id));
+                GameViewModel moves = await _service.ShowPlayerMoves(Guid.Parse(id));
                 var list = moves.Rounds.Select(p => new RoundViewModel
                 {
                     Id = p.Id,
@@ -35,7 +35,7 @@ namespace BlackJack.ApiUI.Controllers
                     RoundNumber = p.RoundNumber
                 }).ToList();
 
-                Rounds model = new Rounds
+                var model = new Rounds
                 {
                     RoundViewModels = list
                 };
@@ -56,7 +56,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var isGameOver = await _service.GetOneMoreCardForPlayer(Guid.Parse(id));
+                bool isGameOver = await _service.GetOneMoreCardForPlayer(Guid.Parse(id));
                 return Ok(isGameOver);
             }
             catch (Exception)
@@ -74,7 +74,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var res = await _service.GetCardsForBots(Guid.Parse(id));
+                bool res = await _service.GetCardsForBots(Guid.Parse(id));
                 return Ok(res);
             }
             catch (Exception)
@@ -85,14 +85,14 @@ namespace BlackJack.ApiUI.Controllers
 
         [HttpGet]
         public async Task<IHttpActionResult> GameResult([FromUri] string id)
-        {           
+        {
             try
             {
                 if (string.IsNullOrWhiteSpace(id))
                 {
                     return BadRequest();
                 }
-                var mainPlayer = await _service.GetStatusForCurrentGame(Guid.Parse(id));
+                PlayerViewModel mainPlayer = await _service.GetStatusForCurrentGame(Guid.Parse(id));
                 return Ok(mainPlayer);
             }
             catch (Exception)

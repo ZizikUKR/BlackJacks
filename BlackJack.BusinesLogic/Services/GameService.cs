@@ -32,9 +32,9 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<Guid> StartGame(string name, int bots)
         {
-            var allParticipantsInGame = await GetAllPlayersInCurrentGame(name, bots);
-            var game = await CreateGame(allParticipantsInGame);
-            var mainPlayer = allParticipantsInGame.SingleOrDefault(p => p.PlayerRole == PlayerRole.Player);
+            List<Player> allParticipantsInGame = await GetAllPlayersInCurrentGame(name, bots);
+            Game game = await CreateGame(allParticipantsInGame);
+            Player mainPlayer = allParticipantsInGame.SingleOrDefault(p => p.PlayerRole == PlayerRole.Player);
             var moves = new List<Move>();
 
             int firstTwoMovesIterator = 2;
@@ -48,7 +48,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<PlayerViewModel>> GetAllPlayers()
         {
-            var players = await _playerRepository.GetAll();
+            IEnumerable<Player> players = await _playerRepository.GetAll();
 
             var playersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
@@ -68,7 +68,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<GameViewModel> ShowPlayerMoves(Guid id)
         {
-            var listOfMoves = (await _moveRepository.GetAllMovesForOneGame(id)).OrderBy(p => p.PlayerId);
+            IOrderedEnumerable<Move> listOfMoves = (await _moveRepository.GetAllMovesForOneGame(id)).OrderBy(p => p.PlayerId);
             var allPlayers = await _playerRepository.GetAll();
 
             var gameViewModel = new GameViewModel
@@ -88,8 +88,8 @@ namespace BlackJack.BusinessLogic.Services
         public async Task<bool> GetOneMoreCardForPlayer(Guid gameId)
         {
             Game currentGame = await GetGame(gameId);
-            var moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
-            var allPlayersExist = await _playerRepository.GetAll();
+            List<Move> moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
+            IEnumerable<Player> allPlayersExist = await _playerRepository.GetAll();
 
             bool isGameOver = false;
             var playersInCurrentGame = new List<Player>();
@@ -125,8 +125,8 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<bool> GetCardsForBots(Guid gameId)
         {
-            var allPlayersExist = await _playerRepository.GetAll();
-            var moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
+            IEnumerable<Player> allPlayersExist = await _playerRepository.GetAll();
+            List<Move> moves = (await _moveRepository.GetAllMovesForOneGame(gameId)).ToList();
 
             var playersInCurrentGame = new List<Player>();
             foreach (var move in moves.Where(p => p.MoveNumber == firstMoveNumber))
@@ -154,8 +154,8 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<PlayerViewModel> GetStatusForCurrentGame(Guid id)
         {
-            var playersStatusesInCurrentGame = (await _playerGameStatusRepository.GetPlayerStatusForGame(id)).ToList();
-            var allPlayersExist = (await _playerRepository.GetAll()).ToList();
+            List<GameResult> playersStatusesInCurrentGame = (await _playerGameStatusRepository.GetPlayerStatusForGame(id)).ToList();
+            List<Player> allPlayersExist = (await _playerRepository.GetAll()).ToList();
 
             var mainPlayer = new GameResult();
             foreach (var item in playersStatusesInCurrentGame)
@@ -212,7 +212,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task FinishGame(List<PlayerViewModel> playersViews, Guid gameId)
         {
-            var dealer = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer);
+            PlayerViewModel dealer = playersViews.SingleOrDefault(p => p.PlayerRole == PlayerRole.Dealer);
             playersViews.Remove(dealer);
 
             foreach (var item in playersViews)
@@ -259,7 +259,7 @@ namespace BlackJack.BusinessLogic.Services
 
             Card cardToAdd = dealDeck.GetCard(deckOfCard);
 
-            var moveIterator = moves.Where(p => p.PlayerId == player.Id).Count();
+            int moveIterator = moves.Where(p => p.PlayerId == player.Id).Count();
             var move = new Move
             {
                 CardId = cardToAdd.Id,
@@ -275,17 +275,13 @@ namespace BlackJack.BusinessLogic.Services
         private async Task<Game> GetGame(Guid id)
         {
             Game currentGame = await _gameRepository.Get(id);
-            var moves = (await _moveRepository.GetAllMovesForOneGame(id)).ToList();
-
-            var allPlayersExist = await _playerRepository.GetAll();
-
             return currentGame;
         }
 
         private async Task<List<Player>> GetAllPlayersInCurrentGame(string name, int amoutOfBots)
         {
-            var allPlayersExists = await _playerRepository.GetAllBotsAndDealer();
-            var currentPlayer = await PlayerRegistration(name);
+            IEnumerable<Player> allPlayersExists = await _playerRepository.GetAllBotsAndDealer();
+            Player currentPlayer = await PlayerRegistration(name);
 
             var players = new List<Player>
             {
@@ -308,7 +304,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task<Player> PlayerRegistration(string name)
         {
-            var player = await _playerRepository.FindPlayerByName(name);
+            Player player = await _playerRepository.FindPlayerByName(name);
 
             if (player != null)
             {
@@ -338,7 +334,7 @@ namespace BlackJack.BusinessLogic.Services
             var dealDeck = new DealCardsHelper();
             dealDeck.GetAllCards(ref deckOfCard);
 
-            var moveIterator = moves.Where(p => p.PlayerId == players.SingleOrDefault(x => x.PlayerRole == PlayerRole.Player)?.Id).Count();
+            int moveIterator = moves.Where(p => p.PlayerId == players.SingleOrDefault(x => x.PlayerRole == PlayerRole.Player)?.Id).Count();
             if (moveIterator > 0)
             {
                 DeleteUsedCardsFromDeck(deckOfCard, moves);
@@ -348,8 +344,8 @@ namespace BlackJack.BusinessLogic.Services
 
             foreach (var user in players)
             {
-                var cardToUser = random.Next(0, deckOfCard.Count);
-                var cardToAdd = deckOfCard[cardToUser];
+                int cardToUser = random.Next(0, deckOfCard.Count);
+                Card cardToAdd = deckOfCard[cardToUser];
                 moves.Add(new Move
                 {
                     CardId = cardToAdd.Id,
@@ -367,7 +363,7 @@ namespace BlackJack.BusinessLogic.Services
         {
             foreach (var move in moves)
             {
-                var card = deckOfCards.SingleOrDefault(m => m.Id == move.CardId);
+                Card card = deckOfCards.SingleOrDefault(m => m.Id == move.CardId);
                 deckOfCards.Remove(card);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.BusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace BlackJack.UI.Controllers
         {
             try
             {
-                var playersExist = (await _historyService.GetAllPlayers()).ToList();
+                List<PlayerViewModel> playersExist = (await _historyService.GetAllPlayers()).ToList();
                 List<SelectListItem> selectListPlayers = playersExist.Select(x => new SelectListItem
                 {
                     Value = x.Name.ToLower(),
@@ -45,7 +46,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("ChoosePlayer");
                 }
-                var allGames = await _historyService.GetAllGamesForOnePlayer(name);
+                List<FinishGameViewModel> allGames = await _historyService.GetAllGamesForOnePlayer(name);
                 return View(allGames);
             }
             catch (Exception)
@@ -62,7 +63,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("Error", "Home");
                 }
-                var moves = await _historyService.GetAllMovesForCurrentGame(id);
+                List<RoundViewModel> moves = await _historyService.GetAllMovesForCurrentGame(id);
                 return View(moves);
             }
             catch (Exception)

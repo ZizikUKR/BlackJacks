@@ -1,5 +1,6 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
+using BlackJack.DataAccess.Entities;
 using BlackJack.DataAccess.Entities.Enums;
 using BlackJack.DataAccess.Repositories.Interfaces;
 using System;
@@ -24,7 +25,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<PlayerViewModel>> GetAllPlayers()
         {
-            var players = await _playerRepository.GetAll();
+            IEnumerable<Player> players = await _playerRepository.GetAll();
 
             var playersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
@@ -45,10 +46,10 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<FinishGameViewModel>> GetAllGamesForOnePlayer(string name)
         {
-            var playersExist = (await _playerRepository.GetAll()).ToList();
-            var mainPlayer = playersExist.FirstOrDefault(p => p.NickName == name);
+            List<Player> playersExist = (await _playerRepository.GetAll()).ToList();
+            Player mainPlayer = playersExist.FirstOrDefault(p => p.NickName == name);
 
-            var allGamesForCurrenPlayer = (await _playerGameStatusRepository.GetGameResultForOnePlayer(mainPlayer.Id)).ToList();
+            List<GameResult> allGamesForCurrenPlayer = (await _playerGameStatusRepository.GetGameResultForOnePlayer(mainPlayer.Id)).ToList();
 
             var gamesResults = new List<FinishGameViewModel>();
             foreach (var item in allGamesForCurrenPlayer)
@@ -66,8 +67,8 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<RoundViewModel>> GetAllMovesForCurrentGame(Guid id)
         {
-            var moves= (await _moveRepository.GetAllMovesForOneGame(id)).ToList();
-            var allPlayersExist = (await _playerRepository.GetAll()).ToList();
+            List<Move> moves= (await _moveRepository.GetAllMovesForOneGame(id)).ToList();
+            List<Player> allPlayersExist = (await _playerRepository.GetAll()).ToList();
             var rounds = new List<RoundViewModel>();
 
             foreach (var item in moves)

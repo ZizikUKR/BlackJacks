@@ -21,7 +21,7 @@ namespace BlackJack.UI.Controllers
         {
             try
             {
-                var playerExist = (await _service.GetAllPlayers()).ToList();
+                List<PlayerViewModel> playerExist = (await _service.GetAllPlayers()).ToList();
                 var model = new StartGameViewModel
                 {
                     Players = playerExist.Select(player => new SelectListItem
@@ -54,7 +54,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("Index");
                 }
-                var id = await _service.StartGame(name, bots);
+                Guid id = await _service.StartGame(name, bots);
                 return RedirectToAction("Start", "Game", new { id });
             }
             catch (Exception)

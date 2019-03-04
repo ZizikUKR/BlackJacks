@@ -40,7 +40,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("Error", "Home");
                 }
-                var result = await _service.GetOneMoreCardForPlayer(id);
+                bool result = await _service.GetOneMoreCardForPlayer(id);
 
                 if (result == false)
                 {
@@ -62,7 +62,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("Error", "Home");
                 }
-                var result = await _service.GetCardsForBots(id);
+                bool result = await _service.GetCardsForBots(id);
                 return RedirectToAction("GameOver", new { id });
             }
             catch (Exception)
@@ -78,7 +78,7 @@ namespace BlackJack.UI.Controllers
                 {
                     return RedirectToAction("Error", "Home");
                 }
-                var mainPlayer = await _service.GetStatusForCurrentGame(id);
+                PlayerViewModel mainPlayer = await _service.GetStatusForCurrentGame(id);
                 return View(mainPlayer);
             }
             catch (Exception)

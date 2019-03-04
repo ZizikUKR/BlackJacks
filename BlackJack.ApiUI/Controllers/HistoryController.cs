@@ -2,6 +2,7 @@
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -20,8 +21,8 @@ namespace BlackJack.ApiUI.Controllers
         {
             try
             {
-                var players = await _service.GetAllPlayers();
-                Players model = new Players
+                List<PlayerViewModel> players = await _service.GetAllPlayers();
+                var model = new Players
                 {
                     PlayerViewModels = players
                 };
@@ -42,7 +43,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var games = await _service.GetAllGamesForOnePlayer(body.Name);
+                List<FinishGameViewModel> games = await _service.GetAllGamesForOnePlayer(body.Name);
 
                 var model = new FinishGame
                 {
@@ -65,7 +66,7 @@ namespace BlackJack.ApiUI.Controllers
                 {
                     return BadRequest();
                 }
-                var moves = await _service.GetAllMovesForCurrentGame(Guid.Parse(id));
+                List<RoundViewModel> moves = await _service.GetAllMovesForCurrentGame(Guid.Parse(id));
                 var model = new Rounds
                 {
                     RoundViewModels = moves
