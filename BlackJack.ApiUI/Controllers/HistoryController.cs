@@ -2,7 +2,6 @@
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,71 +18,64 @@ namespace BlackJack.ApiUI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPlayers()
         {
-            List<PlayerViewModel> players = new List<PlayerViewModel>();
             try
             {
-                 players = await _service.GetAllPlayers();
+                var players = await _service.GetAllPlayers();
+                Players model = new Players
+                {
+                    PlayerViewModels = players
+                };
+                return Ok(model);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return InternalServerError();
             }
-
-            Players model = new Players
-            {
-                PlayerViewModels = players
-            };
-
-            return Ok(model);
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> GetAllPlayerGames([FromBody] PlayerViewModel body)
-        {
-            if (string.IsNullOrWhiteSpace(body.Name))
-            {
-                return BadRequest();
-            }
-            List<FinishGameViewModel> games = new List<FinishGameViewModel>();
+        {            
             try
             {
-                 games = await _service.GetAllGamesForOnePlayer(body.Name);
+                if (string.IsNullOrWhiteSpace(body.Name))
+                {
+                    return BadRequest();
+                }
+                var games = await _service.GetAllGamesForOnePlayer(body.Name);
+
+                var model = new FinishGame
+                {
+                    FinishGameViewModels = games
+                };
+                return Ok(model);
             }
             catch (Exception)
             {
                 return InternalServerError();
             }
-           
-            FinishGame model = new FinishGame
-            {
-                FinishGameViewModels = games
-            };
-            return Ok(model);
         }
 
         [HttpGet]
         public async Task<IHttpActionResult> GetAllMovesForCurrentGame([FromUri] string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return BadRequest();
-            }
-            Guid gameId = Guid.Parse(id);
-            List<RoundViewModel> moves = new List<RoundViewModel>();
+        {           
             try
             {
-                moves = await _service.GetAllMovesForCurrentGame(gameId);
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    return BadRequest();
+                }
+                var moves = await _service.GetAllMovesForCurrentGame(Guid.Parse(id));
+                var model = new Rounds
+                {
+                    RoundViewModels = moves
+                };
+                return Ok(model);
             }
             catch (Exception)
             {
                 return InternalServerError();
             }
-                        
-            Rounds model = new Rounds
-            {
-                RoundViewModels = moves
-            };
-            return Ok(model);
         }
     }
 }

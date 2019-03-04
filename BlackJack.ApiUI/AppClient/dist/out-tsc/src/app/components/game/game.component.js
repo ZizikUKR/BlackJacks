@@ -23,8 +23,6 @@ var GameComponent = /** @class */ (function () {
         var _this = this;
         this.gameService.showMoves(id).subscribe(function (res) {
             _this.moves = res.roundViewModels;
-        }, function (err) {
-            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.getCard = function (id) {
@@ -33,8 +31,6 @@ var GameComponent = /** @class */ (function () {
             _this.getMoves(id);
             _this.isOver = res;
             _this.showResult(_this.isOver);
-        }, function (err) {
-            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.getRestOfCards = function (id) {
@@ -43,8 +39,6 @@ var GameComponent = /** @class */ (function () {
             _this.isOver = res;
             _this.getMoves(id);
             _this.showResult(_this.isOver);
-        }, function (err) {
-            _this.router.navigate(["error"]);
         });
     };
     GameComponent.prototype.showResult = function (isFinish) {
@@ -54,8 +48,6 @@ var GameComponent = /** @class */ (function () {
                 console.log(res);
                 _this.status = res.status;
                 return;
-            }, function (err) {
-                _this.router.navigate(["error"]);
             });
         }
         this.status = '';

@@ -29,15 +29,16 @@ namespace BlackJack.BusinessLogic.Services
             var playersViewModel = new List<PlayerViewModel>();
             foreach (var item in players)
             {
-                if (item.PlayerRole == PlayerRole.Player)
+                if (item.PlayerRole != PlayerRole.Player)
                 {
-                    PlayerViewModel player = new PlayerViewModel
-                    {
-                        Id = item.Id,
-                        Name = item.NickName
-                    };
-                    playersViewModel.Add(player);
+                    continue;
                 }
+                var player = new PlayerViewModel
+                {
+                    Id = item.Id,
+                    Name = item.NickName
+                };
+                playersViewModel.Add(player);
             }
             return playersViewModel;
         }
@@ -76,7 +77,7 @@ namespace BlackJack.BusinessLogic.Services
                     CardValue=item.CardName,
                     Id= item.Id,
                     GameId=item.GameId,
-                    PlayerNickName = allPlayersExist.FirstOrDefault(p=>p.Id==item.PlayerId).NickName.ToString(),
+                    PlayerNickName = allPlayersExist.FirstOrDefault(p=>p.Id==item.PlayerId)?.NickName,
                     RoundNumber = item.MoveNumber
                 });
             }

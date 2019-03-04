@@ -25,11 +25,6 @@ export class HistoryRoundsComponent implements OnInit {
   public loadRounds(id:string){
     this.historyService.getAllRounds(id).subscribe(res=>{
       this.rounds = res.roundViewModels;
-    },
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
   

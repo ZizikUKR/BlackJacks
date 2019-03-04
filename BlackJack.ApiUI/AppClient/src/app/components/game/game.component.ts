@@ -30,11 +30,6 @@ export class GameComponent implements OnInit {
   public getMoves(id: string): void {
     this.gameService.showMoves(id).subscribe(res => {
       this.moves = res.roundViewModels;
-    },
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
 
@@ -43,11 +38,6 @@ export class GameComponent implements OnInit {
       this.getMoves(id);
       this.isOver = res;
       this.showResult(this.isOver);
-    },
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
 
@@ -56,11 +46,6 @@ export class GameComponent implements OnInit {
       this.isOver = res;
       this.getMoves(id);
       this.showResult(this.isOver);
-    },
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
 
@@ -70,11 +55,6 @@ export class GameComponent implements OnInit {
         console.log(res)
         this.status = res.status     
          return
-      },
-      err =>{
-        this.router.navigate(
-          ["error"]
-        );
       })
      }
      this.status = '';

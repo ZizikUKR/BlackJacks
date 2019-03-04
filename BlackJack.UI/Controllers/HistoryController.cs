@@ -1,5 +1,4 @@
 ﻿using BlackJack.BusinessLogic.Interfaces;
-using BlackJack.BusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,62 +18,57 @@ namespace BlackJack.UI.Controllers
         [HttpGet]
         public async Task<ActionResult> ChoosePlayer()
         {
-            List<PlayerViewModel> playersExist = new List<PlayerViewModel>();
             try
             {
-                playersExist = (await _historyService.GetAllPlayers()).ToList();
+                var playersExist = (await _historyService.GetAllPlayers()).ToList();
+                List<SelectListItem> selectListPlayers = playersExist.Select(x => new SelectListItem
+                {
+                    Value = x.Name.ToLower(),
+                    Text = x.Name.ToLower()
+                }).ToList();
+
+                ViewBag.selectListPlayers = selectListPlayers;
+
+                return View();
             }
             catch (Exception)
             {
                 return RedirectToAction("Error", "Home");
             }
-
-            List<SelectListItem> selectListPlayers = playersExist.Select(x => new SelectListItem
-            {
-                Value = x.Name.ToLower(),
-                Text = x.Name.ToLower()
-            }).ToList();
-
-            ViewBag.selectListPlayers = selectListPlayers;
-
-            return View();
         }
 
         public async Task<ActionResult> PlayerGames(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-               return RedirectToAction("ChoosePlayer");
-            }
-            List<FinishGameViewModel> allGames = new List<FinishGameViewModel>();
+        {            
             try
             {
-                allGames = await _historyService.GetAllGamesForOnePlayer(name);
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return RedirectToAction("ChoosePlayer");
+                }
+                var allGames = await _historyService.GetAllGamesForOnePlayer(name);
+                return View(allGames);
             }
             catch (Exception)
             {
-               return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home");
             }
-            return View(allGames);
         }
 
         public async Task<ActionResult> GameInform(Guid id)
         {
-            if (string.IsNullOrWhiteSpace(id.ToString()))
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            List<RoundViewModel> moves = new List<RoundViewModel>();
             try
             {
-                moves = await _historyService.GetAllMovesForCurrentGame(id);
+                if (string.IsNullOrWhiteSpace(id.ToString()))
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+                var moves = await _historyService.GetAllMovesForCurrentGame(id);
+                return View(moves);
             }
             catch (Exception)
             {
                 return RedirectToAction("Error", "Home");
             }
-            List<SelectListItem> selectListPlayers = new List<SelectListItem>();
-            return View(moves);
         }
     }
 }

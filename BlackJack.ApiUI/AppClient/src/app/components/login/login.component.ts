@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { IStartGame } from 'src/app/shared/models/start-game.model';
 import { IPlayer } from 'src/app/shared/models/player.model';
 import { RegisterService } from 'src/app/shared/services/register.service';
+import { error } from 'util';
 
 @Component({
   selector: 'app-login',
@@ -27,11 +28,6 @@ export class LoginComponent implements OnInit {
   public getUsers(): void {
     this.registerService.getUsers().subscribe(res => {
       this.users = res.playerViewModels
-    }, 
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
 
@@ -40,18 +36,11 @@ export class LoginComponent implements OnInit {
       userName : this.userName,
       countOfBots : parseInt(this.countOfBots)
     }
-
+    
     this.registerService.startGame(model).subscribe(res => {   
       this.router.navigate(
         ['/game', res]
       );
-    },
-    err =>{
-      this.router.navigate(
-        ["error"]
-      );
     })
   }
- 
-
 }

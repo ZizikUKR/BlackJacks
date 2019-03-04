@@ -4,12 +4,13 @@ import { NgModule, } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { GameService } from './shared/services/game.service';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HistoryService } from './shared/services/history.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterService } from './shared/services/register.service';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpErrorInterceptor } from './error-handler';
 var appRoutes = [
     {
         path: '',
@@ -44,7 +45,14 @@ var AppModule = /** @class */ (function () {
                 HttpClientModule,
                 RouterModule.forRoot(appRoutes)
             ],
-            providers: [GameService, HistoryService, RegisterService],
+            providers: [
+                {
+                    provide: HTTP_INTERCEPTORS,
+                    useClass: HttpErrorInterceptor,
+                    multi: true,
+                },
+                GameService, HistoryService, RegisterService
+            ],
             bootstrap: [AppComponent]
         })
     ], AppModule);

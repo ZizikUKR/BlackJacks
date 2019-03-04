@@ -27,7 +27,7 @@ namespace BlackJack.DataAccess.Repositories.DapperRepositories
 
         public async Task<IEnumerable<Player>> GetAllBotsAndDealer()
         {
-            var res = await Connection.QueryAsync<Player>($"SELECT * FROM {_table} WHERE PlayerRole =@role OR PlayerRole=@roleTwo" , new { role = PlayerRole.Bot, roleTwo = PlayerRole.Dealer });
+            var res = await Connection.QueryAsync<Player>($"SELECT * FROM {_table} WHERE PlayerRole IN @role", new { role = new[] { PlayerRole.Bot, PlayerRole.Dealer } });
             return res;
         }
     }

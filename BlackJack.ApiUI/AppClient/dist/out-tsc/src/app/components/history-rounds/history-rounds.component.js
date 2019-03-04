@@ -20,8 +20,6 @@ var HistoryRoundsComponent = /** @class */ (function () {
         var _this = this;
         this.historyService.getAllRounds(id).subscribe(function (res) {
             _this.rounds = res.roundViewModels;
-        }, function (err) {
-            _this.router.navigate(["error"]);
         });
     };
     HistoryRoundsComponent = tslib_1.__decorate([

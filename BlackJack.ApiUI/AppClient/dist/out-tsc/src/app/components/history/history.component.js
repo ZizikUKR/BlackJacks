@@ -16,8 +16,6 @@ var HistoryComponent = /** @class */ (function () {
         var _this = this;
         this.historyService.getUsers().subscribe(function (res) {
             _this.players = res.playerViewModels;
-        }, function (err) {
-            _this.router.navigate(["error"]);
         });
     };
     HistoryComponent.prototype.getAllGames = function () {
@@ -28,8 +26,6 @@ var HistoryComponent = /** @class */ (function () {
         console.log(model.name);
         this.historyService.getAllPlayerGames(model).subscribe(function (res) {
             _this.games = res.finishGameViewModels;
-        }, function (rr) {
-            _this.router.navigate(["error"]);
         });
     };
     HistoryComponent.prototype.showGameMoves = function (id) {
